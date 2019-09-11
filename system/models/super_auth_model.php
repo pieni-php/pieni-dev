@@ -117,7 +117,7 @@ class super_auth_model extends model {
 		if (!password_verify($this->request['_post']['password'], $actor['password'])) {
 			$this->load_error(500, 'Incorrect password');
 		}
-		$_SESSION['auth']['m'] = [
+		$_SESSION['auth'][$this->target['actor']] = [
 			'id' => $actor['id'],
 			'email' => $actor['email'],
 		];
@@ -277,7 +277,7 @@ class super_auth_model extends model {
 	{
 		$actor = $this->row('SELECT `'.$this->target['table'].'_id` AS `id` FROM `auth_'.$this->target['actor'].'` WHERE `'.$this->target['table'].'_id` = :id', [
 			'id' => [
-				'value' => $_SESSION['auth']['m']['id'],
+				'value' => $_SESSION['auth'][$this->target['actor']]['id'],
 				'data_type' => PDO::PARAM_INT,
 			],
 		]);
@@ -302,19 +302,19 @@ class super_auth_model extends model {
 			],
 		]);
 		$this->get_dbh()->commit();
-		unset($_SESSION['auth']['m']);
+		unset($_SESSION['auth'][$this->target['actor']]);
 	}
 
 	public function logout()
 	{
-		unset($_SESSION['auth']['m']);
+		unset($_SESSION['auth'][$this->target['actor']]);
 	}
 
 	public function change_email()
 	{
 		$this->pbe('INSERT INTO `auth_'.$this->target['actor'].'_change_email_attempted` SET `'.$this->target['table'].'_id` = :id, `'.$this->target['table'].'_email` = :email, `auth_'.$this->target['actor'].'_change_email_attempted_token` = :token, `auth_'.$this->target['actor'].'_change_email_attempted_microtime` = :microtime', [
 			'id' => [
-				'value' => $_SESSION['auth']['m']['id'],
+				'value' => $_SESSION['auth'][$this->target['actor']]['id'],
 				'data_type' => PDO::PARAM_INT,
 			],
 			'email' => [
@@ -335,13 +335,14 @@ class super_auth_model extends model {
 			'id' => $this->get_dbh()->lastInsertId(),
 			'token' => $this->request['token'],
 		]);
+		unset($_SESSION['auth'][$this->target['actor']]);
 	}
 
 	public function change_password()
 	{
 		$this->pbe('UPDATE `auth_'.$this->target['actor'].'` SET `'.$this->target['table'].'_password` = :password WHERE `'.$this->target['table'].'_id` = :id', [
 			'id' => [
-				'value' => $_SESSION['auth']['m']['id'],
+				'value' => $_SESSION['auth'][$this->target['actor']]['id'],
 				'data_type' => PDO::PARAM_INT,
 			],
 			'password' => [
@@ -349,6 +350,6 @@ class super_auth_model extends model {
 				'data_type' => PDO::PARAM_STR,
 			],
 		]);
-		unset($_SESSION['auth']['m']);
+		unset($_SESSION['auth'][$this->target['actor']]);
 	}
 }

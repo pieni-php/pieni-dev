@@ -50,7 +50,7 @@ class super_auth_controller extends controller {
 				data: $(e.target).serialize(),
 				success: (result) => {
 					$(e.target).find('button').prop('disabled', true);
-					location.href = this.href('', {actor: 'm'});
+					location.href = this.href('', {actor: this.target.actor});
 				},
 				error: (jqXHR) => {
 					const error = JSON.parse(jqXHR.responseText);
