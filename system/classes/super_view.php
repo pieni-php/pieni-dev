@@ -32,7 +32,7 @@ class super_view {
 	{
 		ob_clean();
 		if ($response_code === 403) {
-			header('Location: '.$this->href('auth_m/login', ['actor' => $this->config['actors'][0]], true));
+			header('Location: '.$this->href('auth_'.$this->request['actor'].'/login', ['actor' => $this->config['actors'][0]], true));
 			exit;
 		}
 		http_response_code($response_code);
