@@ -107,6 +107,30 @@ class super_core {
 
 	private function exec_api_request()
 	{
+		$this->request_executer = $this->get_model();
+		$this->set_exception_handler();
+		$result = call_user_func_array([$this->request_executer, $this->request['action']], $this->request['argv']);
+		echo json_encode($result, JSON_UNESCAPED_UNICODE);
+	}
+
+	private function validate_request()
+	{
+		if ($this->request['actor'] !== $this->config['actors'][0] && !isset($_SESSION['auth'][$this->request['actor']])) {
+			$this->request_executer->load_error(403, 'Authentication required');
+		}
+		if (!isset($this->config['actions'][$this->request['type']][$this->request['actor']]) || !in_array($this->request['target'], array_keys($this->config['actions'][$this->request['type']][$this->request['actor']]))) {
+			$this->request_executer->load_error(404, 'Invalid target \''.$this->request['target'].'\'');
+		}
+		if (!isset($this->config['actions'][$this->request['type']][$this->request['actor']][$this->request['target']]) || !in_array($this->request['action'], array_keys($this->config['actions'][$this->request['type']][$this->request['actor']][$this->request['target']]))) {
+			$this->request_executer->load_error(404, 'Invalid action \''.$this->request['action'].'\'');
+		}
+		if (!isset($this->config['actions'][$this->request['type']][$this->request['actor']][$this->request['target']][$this->request['action']]['argc']) || count($this->request['argv']) !== $this->config['actions'][$this->request['type']][$this->request['actor']][$this->request['target']][$this->request['action']]['argc']) {
+			$this->request_executer->load_error(404, 'Invalid argc');
+		}
+	}
+
+	protected function get_model()
+	{
 		self::fallback(
 			[
 				['application', 'system'],
@@ -172,26 +196,7 @@ class super_core {
 		if (!method_exists($model_name, $this->request['action'])) {
 			$this->request_executer->load_error(404, 'Method \''.$this->request['action'].'\' not found');
 		}
-		$this->request_executer = new $model_name($this->config, $this->request, $this->target);
-		$this->set_exception_handler();
-		$result = call_user_func_array([$this->request_executer, $this->request['action']], $this->request['argv']);
-		echo json_encode($result, JSON_UNESCAPED_UNICODE);
-	}
-
-	private function validate_request()
-	{
-		if ($this->request['actor'] !== $this->config['actors'][0] && !isset($_SESSION['auth'][$this->request['actor']])) {
-			$this->request_executer->load_error(403, 'Authentication required');
-		}
-		if (!isset($this->config['actions'][$this->request['type']][$this->request['actor']]) || !in_array($this->request['target'], array_keys($this->config['actions'][$this->request['type']][$this->request['actor']]))) {
-			$this->request_executer->load_error(404, 'Invalid target \''.$this->request['target'].'\'');
-		}
-		if (!isset($this->config['actions'][$this->request['type']][$this->request['actor']][$this->request['target']]) || !in_array($this->request['action'], array_keys($this->config['actions'][$this->request['type']][$this->request['actor']][$this->request['target']]))) {
-			$this->request_executer->load_error(404, 'Invalid action \''.$this->request['action'].'\'');
-		}
-		if (!isset($this->config['actions'][$this->request['type']][$this->request['actor']][$this->request['target']][$this->request['action']]['argc']) || count($this->request['argv']) !== $this->config['actions'][$this->request['type']][$this->request['actor']][$this->request['target']][$this->request['action']]['argc']) {
-			$this->request_executer->load_error(404, 'Invalid argc');
-		}
+		return new $model_name($this->config, $this->request, $this->target);
 	}
 
 	private function set_exception_handler()
