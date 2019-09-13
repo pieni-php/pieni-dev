@@ -4,6 +4,7 @@ return [
 	'table' => 'category',
 	'id_expr' => '`category_id`',
 	'name_expr' => '`category_name`',
+	'has_children' => ['item'],
 	'columns' => [
 		'category_name' => [
 			'data_type' => PDO::PARAM_STR,

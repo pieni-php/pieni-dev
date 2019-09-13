@@ -5,7 +5,7 @@ class super_core {
 		session_start();
 		$this->config = $this->get_config();
 		$this->request = $this->get_request($_server);
-		$this->target = $this->get_target();
+		$this->target = $this->get_target($this->request['target']);
 	}
 
 	private function get_config()
@@ -25,16 +25,23 @@ class super_core {
 		);
 	}
 
-	private function get_target()
+	private function get_target($target, $has_parent = false)
 	{
 		return self::fallback(
 			[
 				['application', 'system'],
 				['targets'],
-				[$this->request['target'].'.php'],
+				[$target.'.php'],
 			],
 			function ($path) {
-				return require_once './'.$path;
+				$target = require_once './'.$path;
+				if (!$has_parent && isset($target['has_children'])) {
+					$target['children'] = [];
+					foreach ($target['has_children'] as $children_name) {
+						$target['children'][$children_name] = $this->get_target($children_name, true);
+					}
+				}
+				return $target;
 			},
 			function ($file) {
 				return [
