@@ -108,6 +108,8 @@ class super_core {
 	private function exec_api_request()
 	{
 		$this->request_executer = $this->get_model();
+		$this->validate_request();
+		$this->request_executer = $this->get_target_model();
 		$this->set_exception_handler();
 		$result = call_user_func_array([$this->request_executer, $this->request['action']], $this->request['argv']);
 		echo json_encode($result, JSON_UNESCAPED_UNICODE);
@@ -156,9 +158,11 @@ class super_core {
 				class_alias('super_model', 'model');
 			}
 		);
-		$this->request_executer = new model($this->config, $this->request, $this->target);
-		$this->validate_request();
-		$super_model_name = self::fallback(
+	}
+
+	protected function get_target_model()
+	{
+		$super_target_model_name = self::fallback(
 			[
 				['application', 'system'],
 				['models'],
@@ -171,7 +175,7 @@ class super_core {
 			function ($file) {
 			}
 		);
-		$model_name = self::fallback(
+		$target_model_name = self::fallback(
 			[
 				['application', 'system'],
 				['models'],
@@ -181,22 +185,22 @@ class super_core {
 				require_once './'.$path;
 				return pathinfo($path)['filename'];
 			},
-			function ($file, $super_model_name) {
-				if ($super_model_name !== null && class_exists($super_model_name)) {
-					return $super_model_name;
+			function ($file, $super_target_model_name) {
+				if ($super_target_model_name !== null && class_exists($super_target_model_name)) {
+					return $super_target_model_name;
 				}
 				$this->request_executer->load_error(404, 'Fallback for model file \''.$file.'\' failed');
 				exit(1);
 			},
-			$super_model_name
+			$super_target_model_name
 		);
-		if (!class_exists($model_name)) {
-			$this->request_executer->load_error(404, 'Class \''.$model_name.'\' not found');
+		if (!class_exists($target_model_name)) {
+			$this->request_executer->load_error(404, 'Class \''.$target_model_name.'\' not found');
 		}
-		if (!method_exists($model_name, $this->request['action'])) {
+		if (!method_exists($target_model_name, $this->request['action'])) {
 			$this->request_executer->load_error(404, 'Method \''.$this->request['action'].'\' not found');
 		}
-		return new $model_name($this->config, $this->request, $this->target);
+		return new $target_model_name($this->config, $this->request, $this->target);
 	}
 
 	private function set_exception_handler()
