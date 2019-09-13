@@ -33,7 +33,7 @@ class super_core {
 				['targets'],
 				[$target.'.php'],
 			],
-			function ($path) {
+			function ($path, $has_parent) {
 				$target = require_once './'.$path;
 				if (!$has_parent && isset($target['has_children'])) {
 					$target['children'] = [];
@@ -46,7 +46,8 @@ class super_core {
 			function ($file) {
 				return [
 				];
-			}
+			},
+			$has_parent
 		);
 	}
 
