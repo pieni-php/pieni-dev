@@ -102,11 +102,11 @@ class super_crud_controller extends controller {
 	{
 		$.ajax({
 			url: this.href(this.request.target + '/' + this.request.action + '/' + id, {type: 'api'}),
-			success: (result) => {
-				const row = JSON.parse(result);
-				$('[name="_name"]').text(row['_name']);
+			success: (data) => {
+				const result = JSON.parse(data);
+				$('[name="_name"]').text(result.row['_name']);
 				this.target.actions[this.request.action].columns.forEach((column_name) => {
-					$('[name="' + column_name + '"]').text(row[column_name]).val(row[column_name]);
+					$('[name="' + column_name + '"]').text(result.row[column_name]).val(result.row[column_name]);
 				});
 			},
 			error: (jqXHR) => {

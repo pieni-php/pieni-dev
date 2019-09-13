@@ -1,5 +1,10 @@
 <?php
 class super_crud_model extends model {
+	public function __construct($config, $request, $target)
+	{
+		parent::__construct($config, $request, $target);
+	}
+
 	public function index()
 	{
 		return $this->rows('SELECT '.$this->get_select_clause().' FROM `'.$this->target['table'].'`'.$this->get_join_tables());
@@ -7,7 +12,15 @@ class super_crud_model extends model {
 
 	public function view($id)
 	{
-		return $this->get_row($id);
+		$result = [];
+		$result['row'] = $this->get_row($id);
+		if (isset($this->children)) {
+			$result['children'] = [];
+			foreach ($this->children as $child_name => $child) {
+				$result['children'][$child_name] = $child->index();
+			}
+		}
+		return $result;
 	}
 
 	public function add_affect()
@@ -21,7 +34,7 @@ class super_crud_model extends model {
 
 	public function edit($id)
 	{
-		return $this->get_row($id);
+		return ['row' => $this->get_row($id)];
 	}
 
 	public function edit_affect($id)
@@ -40,7 +53,7 @@ class super_crud_model extends model {
 
 	public function delete($id)
 	{
-		return $this->get_row($id);
+		return ['row' => $this->get_row($id)];
 	}
 
 	public function delete_affect($id)

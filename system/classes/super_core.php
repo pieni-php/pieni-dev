@@ -117,7 +117,7 @@ class super_core {
 	{
 		$this->request_executer = $this->get_model();
 		$this->validate_request();
-		$this->request_executer = $this->get_target_model();
+		$this->request_executer = $this->get_target_model($this->request['target'], $this->target);
 		$this->set_exception_handler();
 		$result = call_user_func_array([$this->request_executer, $this->request['action']], $this->request['argv']);
 		echo json_encode($result, JSON_UNESCAPED_UNICODE);
@@ -168,13 +168,13 @@ class super_core {
 		);
 	}
 
-	protected function get_target_model()
+	protected function get_target_model($target_name, $target)
 	{
 		$super_target_model_name = self::fallback(
 			[
 				['application', 'system'],
 				['models'],
-				isset($this->target['fallback']) ? ['super_'.$this->request['target'].'_model.php', 'super_'.$this->target['fallback'].'_model.php'] : ['super_'.$this->request['target'].'_model.php'],
+				isset($target['fallback']) ? ['super_'.$target_name.'_model.php', 'super_'.$target['fallback'].'_model.php'] : ['super_'.$target_name.'_model.php'],
 			],
 			function ($path) {
 				require_once './'.$path;
@@ -187,7 +187,7 @@ class super_core {
 			[
 				['application', 'system'],
 				['models'],
-				isset($this->target['fallback']) ? [$this->request['target'].'_model.php', $this->target['fallback'].'_model.php'] : [$this->request['target'].'_model.php'],
+				isset($target['fallback']) ? [$target_name.'_model.php', $target['fallback'].'_model.php'] : [$target_name.'_model.php'],
 			],
 			function ($path) {
 				require_once './'.$path;
@@ -208,7 +208,14 @@ class super_core {
 		if (!method_exists($target_model_name, $this->request['action'])) {
 			$this->request_executer->load_error(404, 'Method \''.$this->request['action'].'\' not found');
 		}
-		return new $target_model_name($this->config, $this->request, $this->target);
+		$target_model = new $target_model_name($this->config, $this->request, $target);
+		if (isset($target['children'])) {
+			$target_model->children = [];
+			foreach ($target['children'] as $child_target_name => $child_target) {
+				$target_model->children[$child_target_name] = $this->get_target_model($child_target_name, $child_target);
+			}
+		}
+		return $target_model;
 	}
 
 	private function set_exception_handler()
