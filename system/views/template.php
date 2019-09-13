@@ -11,7 +11,7 @@
   </head>
   <body>
 <?php $this->load_view('navbar', $data); ?>
-<?php $this->load_view($this->request['action'], $data); ?>
+<?php $this->load_view($this->request['action'], $data, ['target' => $this->request['target']]); ?>
 <?php $this->load_view('modals/error', $data); ?>
 <?php $this->load_view('modals/alert', $data); ?>
   </body>

@@ -1,11 +1,13 @@
 <div class="container">
-  <h2>Index of <?php $this->h($this->request['target']); ?></h2>
-          <div class="text-right">
-<?php foreach($this->config['actions']['page'][$this->request['actor']][$this->request['target']] as $action_name => $action): ?>
+<?php if ($data['target'] === $this->request['target']): ?>
+  <h2>Index of <?php $this->h($data['target']); ?></h2>
+<?php endif; ?>
+  <div class="text-right">
+<?php foreach($this->config['actions']['page'][$this->request['actor']][$data['target']] as $action_name => $action): ?>
 <?php if ($action['argc'] !== 0 || $action_name === 'index') continue; ?>
-          <a href="<?php $this->href($this->request['target'].'/'.$action_name); ?>" class="btn btn-primary"><?php $this->h($action_name); ?></a>
+    <a href="<?php $this->href($data['target'].'/'.$action_name); ?>" class="btn btn-primary"><?php $this->h($action_name); ?></a>
 <?php endforeach; ?>
-          </div>
+  </div>
   <div class="row">
     <div class="col-4 d-none">
       <div class="card mb-5">
@@ -20,9 +22,9 @@
 <?php endforeach; ?>
           </table>
           <div class="text-right">
-<?php foreach($this->config['actions']['page'][$this->request['actor']][$this->request['target']] as $action_name => $action): ?>
+<?php foreach($this->config['actions']['page'][$this->request['actor']][$data['target']] as $action_name => $action): ?>
 <?php if ($action['argc'] !== 1) continue; ?>
-          <a href="<?php $this->href($this->request['target'].'/'.$action_name); ?>" class="btn btn-primary"><?php $this->h($action_name); ?></a>
+          <a href="<?php $this->href($data['target'].'/'.$action_name); ?>" class="btn btn-primary"><?php $this->h($action_name); ?></a>
 <?php endforeach; ?>
           </div>
         </div>

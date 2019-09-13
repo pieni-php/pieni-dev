@@ -18,3 +18,21 @@
     </div>
   </div>
 </form>
+<?php if (isset($this->target['children'])): ?>
+<div class="container">
+  <ul class="nav nav-tabs">
+<?php foreach ($this->target['children'] as $child_name => $child): ?>
+    <li class="nav-item">
+      <a class="nav-link<?php if ($child_name === array_keys($this->target['children'])[0]): ?> active<?php endif; ?>" data-toggle="tab" href="#tab_<?php $this->h($child_name); ?>"><?php $this->h($child_name); ?></a>
+    </li>
+<?php endforeach; ?>
+  </ul>
+  <div class="tab-content">
+<?php foreach ($this->target['children'] as $child_name => $child): ?>
+    <div class="tab-pane fade<?php if ($child_name === array_keys($this->target['children'])[0]): ?> show active<?php endif; ?>" id="tab_<?php $this->h($child_name); ?>">
+<?php $this->load_view('index', $data, ['target' => $child_name]); ?>
+    </div>
+<?php endforeach; ?>
+  </div>
+</div>
+<?php endif; ?>

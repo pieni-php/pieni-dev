@@ -7,8 +7,12 @@ class super_view {
 		$this->target = $target;
 	}
 
-	public function load_view($view_name, $data = [])
+	public function load_view($view_name, ...$data_list)
 	{
+		$data = [];
+		foreach ($data_list as $array) {
+			$data = array_merge($data, $array);
+		}
 		core::fallback(
 			[
 				['application', 'system'],

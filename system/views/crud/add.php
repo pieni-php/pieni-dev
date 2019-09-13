@@ -2,7 +2,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5>Adding <?php $this->h($this->request['target']); ?></h5>
+        <h5>Adding <?php $this->h($data['target']); ?></h5>
       </div>
       <div class="modal-body">
 <?php foreach ($this->target['actions'][$this->request['action'].'_affect']['columns'] as $column_name): ?>
