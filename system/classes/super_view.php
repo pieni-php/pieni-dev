@@ -15,7 +15,6 @@ class super_view {
 		}
 		core::fallback(
 			[
-				['application', 'system'],
 				['views'],
 				[$this->request['language'], ''],
 				[$this->request['actor'], ''],
@@ -74,7 +73,6 @@ class super_view {
 	{
 		core::fallback(
 			[
-				['application', 'system'],
 				['assets'],
 				[$asset],
 			],

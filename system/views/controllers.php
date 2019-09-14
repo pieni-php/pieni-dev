@@ -1,6 +1,5 @@
 <?php $super_target_controller_path = core::fallback(
 	[
-		['application', 'system'],
 		['controllers'],
 		isset($this->target['fallback']) ? ['super_'.$this->request['target'].'_controller.js', 'super_'.$this->target['fallback'].'_controller.js'] :  ['super_'.$this->request['target'].'_controller.js'],
 	],
@@ -13,7 +12,6 @@
 ); ?>
 <?php $target_controller_path = core::fallback(
 	[
-		['application', 'system'],
 		['controllers'],
 		isset($this->target['fallback']) ? [$this->request['target'].'_controller.js', $this->target['fallback'].'_controller.js'] :  [$this->request['target'].'_controller.js'],
 	],
@@ -27,7 +25,6 @@
 <?php if ($super_target_controller_path !== false || $target_controller_path !== false): ?>
 <?php $super_controller_path = core::fallback(
 	[
-		['application', 'system'],
 		['classes'],
 		['super_controller.js'],
 	],
@@ -40,7 +37,6 @@
 ); ?>
 <?php $controller_path = core::fallback(
 	[
-		['application', 'system'],
 		['classes'],
 		['controller.js'],
 	],

@@ -1,5 +1,6 @@
 <?php
 return [
+	'packages' => ['application', 'system'],
 	'pdo' => [
 		'dsn' => 'mysql:dbname=pieni_examples_auth',
 		'username' => 'root',

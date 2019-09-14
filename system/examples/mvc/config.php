@@ -1,5 +1,6 @@
 <?php
 return [
+	'packages' => ['application', 'system'],
 	'pdo' => [
 		'dsn' => 'mysql:dbname=mysql',
 		'username' => 'root',
