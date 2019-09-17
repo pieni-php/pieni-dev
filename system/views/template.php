@@ -7,7 +7,7 @@
     <script src="<?php $this->asset('jquery.min.js'); ?>"></script>
     <script src="<?php $this->asset('bootstrap.min.js'); ?>"></script>
     <link rel="stylesheet" href="<?php $this->asset('bootstrap.min.css'); ?>">
-<?php $this->load_view('controllers', $data); ?>
+<?php $this->load_target_controller($this->request['target']); ?>
   </head>
   <body>
 <?php $this->load_view('navbar', $data); ?>

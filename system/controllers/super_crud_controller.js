@@ -2,7 +2,7 @@ class super_crud_controller extends controller {
 	index()
 	{
 		$.ajax({
-			url: this.href(this.request.target, {type: 'api'}),
+			url: this.href(this.target.table, {type: 'api'}),
 			success: (result) => {
 				const rows = JSON.parse(result);
 				rows.forEach((row) => {
@@ -28,7 +28,18 @@ class super_crud_controller extends controller {
 
 	view(id)
 	{
+		if (this.target.children !== undefined) {
+			this.children = {};
+			for (const child_name in this.target.children) {
+				this.children[child_name] = new (function (classname){return Function('return (' + classname + ')')()}(this.target['children'][child_name]['controller_class']))(
+					this.config,
+					this.request,
+					this.target['children'][child_name]
+				);
+			}
+		}
 		this.get_row(id);
+		this.children.item.index();
 	}
 
 	add()

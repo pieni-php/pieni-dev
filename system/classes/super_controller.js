@@ -4,8 +4,12 @@ class super_controller {
 		this.config = config;
 		this.request = request;
 		this.target = target;
+	}
+
+	onload()
+	{
 		$(() => {
-			this[this.request.action].apply(this, this.request.argv)
+			this[this.request.action].apply(this, this.request.argv);
 		});
 	}
 

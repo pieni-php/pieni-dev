@@ -1,5 +1,7 @@
 <?php
 class super_view {
+	protected $loaded_target_controllers = [];
+
 	public function __construct($config, $request, $target)
 	{
 		$this->config = $config;
@@ -83,5 +85,111 @@ class super_view {
 				$this->load_error(500, 'Fallback for \''.$file.'\' failed');
 			}
 		);
+	}
+
+	protected function get_super_controller_path()
+	{
+		return core::fallback(
+			[
+				['classes'],
+				['super_controller.js'],
+			],
+			function ($path) {
+				return $path;
+			},
+			function ($file) {
+				return false;
+			}
+		);
+	}
+
+	protected function get_controller_path()
+	{
+		return core::fallback(
+			[
+				['classes'],
+				['controller.js'],
+			],
+			function ($path) {
+				return $path;
+			},
+			function ($file) {
+				return false;
+			}
+		);
+	}
+
+	protected function get_super_target_controller_path($target)
+	{
+		return core::fallback(
+			[
+				['controllers'],
+				isset($this->target['fallback']) ? ['super_'.$target.'_controller.js', 'super_'.$this->target['fallback'].'_controller.js'] :  ['super_'.$target.'_controller.js'],
+			],
+			function ($path) {
+				return $path;
+			},
+			function ($file) {
+				return false;
+			}
+		);
+	}
+
+	protected function get_target_controller_path($target)
+	{
+		return core::fallback(
+			[
+				['controllers'],
+				isset($this->target['fallback']) ? [$target.'_controller.js', $this->target['fallback'].'_controller.js'] :  [$target.'_controller.js'],
+			],
+			function ($path) {
+				return $path;
+			},
+			function ($file) {
+				return false;
+			}
+		);
+	}
+
+	protected function load_target_controller($target, $has_parent = false)
+	{
+		$super_target_controller_path = $this->get_super_target_controller_path($target);
+		$target_controller_path = $this->get_target_controller_path($target);
+		if ($super_target_controller_path !== false || $target_controller_path !== false)
+		{
+			if (!$has_parent)
+			{
+				$super_controller_path = $this->get_super_controller_path();
+				$controller_path = $this->get_controller_path();
+				echo '<script src="'.$this->href($super_controller_path, ['actor' => $this->config['actors'][0]], true).'"></script>'."\n";
+				if ($controller_path !== false)
+				{
+					echo '<script src="'.$this->href($controller_path, ['actor' => $this->config['actors'][0]], true).'"></script>'."\n";
+				} else {
+					echo '<script>const controller = super_controller;</script>'."\n";
+				}
+			}
+			if ($super_target_controller_path !== false && !in_array($super_target_controller_path, $this->loaded_target_controllers)) {
+				$this->loaded_target_controllers[] = $super_target_controller_path;
+				echo '<script src="'.$this->href($super_target_controller_path, ['actor' => $this->config['actors'][0]], true).'"></script>'."\n";
+			}
+			if ($target_controller_path !== false && !in_array($super_target_controller_path, $this->loaded_target_controllers)) {
+				$this->loaded_target_controllers[] = $target_controller_path;
+				echo '<script src="'.$this->href($target_controller_path, ['actor' => $this->config['actors'][0]], true).'"></script>'."\n";
+			}
+			if (!$has_parent && isset($this->target['children']))
+			{
+				foreach ($this->target['children'] as $child_name => $child)
+				{
+					$this->load_target_controller($child_name, true);
+				}
+			}
+			if (!$has_parent) {
+				$this->target['controller_class'] = pathinfo($target_controller_path !== false ? $target_controller_path : $super_target_controller_path)['filename'];
+				echo '<script>(new '.$this->target['controller_class'].'('.json_encode($this->config, JSON_UNESCAPED_UNICODE).', '.json_encode($this->request, JSON_UNESCAPED_UNICODE).', '.json_encode($this->target, JSON_UNESCAPED_UNICODE).')).onload();</script>';
+			} else {
+				$this->target['children'][$target]['controller_class'] = pathinfo($target_controller_path !== false ? $target_controller_path : $super_target_controller_path)['filename'];
+			}
+		}
 	}
 }
