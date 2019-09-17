@@ -5,6 +5,17 @@ class super_crud_model extends model {
 		parent::__construct($config, $request, $target);
 	}
 
+	public function child_of($parent, $parent_id)
+	{
+		$parent_id_expr = core::get_target($parent, true)['id_expr'];
+		return $this->rows('SELECT '.$this->get_select_clause().' FROM `'.$this->target['table'].'`'.$this->get_join_tables().' WHERE '.$parent_id_expr.' = :parent_id', [
+			'parent_id' => [
+				'value' => $parent_id,
+				'data_type' => PDO::PARAM_STR,
+			],
+		]);
+	}
+
 	public function index()
 	{
 		return $this->rows('SELECT '.$this->get_select_clause().' FROM `'.$this->target['table'].'`'.$this->get_join_tables());
@@ -17,7 +28,7 @@ class super_crud_model extends model {
 		if (isset($this->children)) {
 			$result['children'] = [];
 			foreach ($this->children as $child_name => $child) {
-				$result['children'][$child_name] = $child->index();
+//				$result['children'][$child_name] = $child->child_of($this->request['target'], $id);
 			}
 		}
 		return $result;

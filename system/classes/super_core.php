@@ -36,7 +36,7 @@ class super_core {
 		return $config;
 	}
 
-	private function get_target($target, $has_parent = false)
+	public static function get_target($target, $has_parent = false)
 	{
 		return self::fallback(
 			[
@@ -44,11 +44,11 @@ class super_core {
 				[$target.'.php'],
 			],
 			function ($path, $has_parent) {
-				$target = require_once './'.$path;
+				$target = require './'.$path;
 				if (!$has_parent && isset($target['has_children'])) {
 					$target['children'] = [];
 					foreach ($target['has_children'] as $children_name) {
-						$target['children'][$children_name] = $this->get_target($children_name, true);
+						$target['children'][$children_name] = self::get_target($children_name, true);
 					}
 				}
 				return $target;

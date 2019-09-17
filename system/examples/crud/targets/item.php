@@ -19,6 +19,12 @@ return [
 		],
 	],
 	'actions' => [
+		'child_of' => [
+			'columns' => [
+				'category_name',
+				'item_name',
+			],
+		],
 		'index' => [
 			'columns' => [
 				'category_name',

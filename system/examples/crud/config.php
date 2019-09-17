@@ -70,6 +70,9 @@ return [
 					],
 				],
 				'item' => [
+					'child_of' => [
+						'argc' => 2,
+					],
 					'index' => [
 						'argc' => 0,
 					],

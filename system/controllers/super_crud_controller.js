@@ -1,4 +1,31 @@
 class super_crud_controller extends controller {
+	child_of(parent, parent_id)
+	{
+		$.ajax({
+			url: this.href(this.target.table + '/child_of/' + parent + '/' + parent_id, {type: 'api'}),
+			success: (result) => {
+				const rows = JSON.parse(result);
+				rows.forEach((row) => {
+					const clone = $('.d-none').eq(0).clone(true);
+					clone.find('[name="_name"]').text(row['_name']);
+					Object.keys(this.target.columns).forEach((column_name) => {
+						clone.find('[name="' + column_name + '"]').text(row[column_name]);
+					});
+					const action_links = clone.find('a');
+					for (let i = 0; i < action_links.length; i++) {
+						action_links.eq(i).attr('href', action_links.eq(i).attr('href') + '/' + row['_id']);
+					}
+					clone.removeClass('d-none');
+					clone.appendTo($('.d-none').eq(0).parent());
+				});
+			},
+			error: (jqXHR) => {
+				const error = JSON.parse(jqXHR.responseText);
+				this.load_error(error.response_code, error.debug);
+			},
+		});
+	}
+
 	index()
 	{
 		$.ajax({
@@ -28,6 +55,7 @@ class super_crud_controller extends controller {
 
 	view(id)
 	{
+		this.get_row(id);
 		if (this.target.children !== undefined) {
 			this.children = {};
 			for (const child_name in this.target.children) {
@@ -36,10 +64,9 @@ class super_crud_controller extends controller {
 					this.request,
 					this.target['children'][child_name]
 				);
+				this.children[child_name].child_of(this.target.table, id);
 			}
 		}
-		this.get_row(id);
-		this.children.item.index();
 	}
 
 	add()
