@@ -190,7 +190,6 @@ class super_core {
 		);
 		$target_model_name = self::fallback(
 			[
-				['application', 'system'],
 				['models'],
 				isset($target['fallback']) ? [$target_name.'_model.php', $target['fallback'].'_model.php'] : [$target_name.'_model.php'],
 			],
