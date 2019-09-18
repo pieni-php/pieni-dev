@@ -26,6 +26,28 @@ class super_crud_controller extends controller {
 		});
 	}
 
+	add_child_of(parent, parent_id)
+	{
+		$('form').submit((e) => {
+			$.ajax({
+				url: this.href(this.request.target + '/' + this.request.action + '_affect/' + parent + '/' + parent_id, {type: 'api'}),
+				type: 'post',
+				data: $(e.target).serialize(),
+				success: (result) => {
+					$(e.target).find('button').prop('disabled', true);
+					this.load_alert('Saved.', () => {
+						history.back();
+					});
+				},
+				error: (jqXHR) => {
+					const error = JSON.parse(jqXHR.responseText);
+					this.load_error(error.response_code, error.debug);
+				},
+			});
+			return false;
+		});
+	}
+
 	index()
 	{
 		$.ajax({

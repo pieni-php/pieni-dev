@@ -16,6 +16,21 @@ class super_crud_model extends model {
 		]);
 	}
 
+	public function add_child_of_affect($parent, $parent_id)
+	{
+		$parent_id_expr = core::get_target($parent, true)['id_expr'];
+		$columns = $this->get_columns();
+		$this->pbe(
+			'INSERT INTO `'.$this->target['table'].'` SET '.$parent_id_expr.' = :parent_id, '.$this->get_set_clause($columns),
+			array_merge($this->get_bind_assocs($columns, $this->request['_post']), [
+				'parent_id' => [
+					'value' => $parent_id,
+					'data_type' => PDO::PARAM_STR,
+				],
+			])
+		);
+	}
+
 	public function index()
 	{
 		return $this->rows('SELECT '.$this->get_select_clause().' FROM `'.$this->target['table'].'`'.$this->get_join_tables());
