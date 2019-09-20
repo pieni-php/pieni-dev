@@ -10,15 +10,17 @@ class super_exception_handler {
 		set_exception_handler(function($e) {
 			$data = [
 				'error_message' => self::load_error_message($e->getMessage()),
-				'exception_message' => $e->getMessage(),
-				'exception_file' => $e->getFile(),
-				'exception_line' => $e->getLine(),
-				'debug_message' => self::load_debug_message($e->getMessage()),
+				'debug' => [
+					'exception_message' => $e->getMessage(),
+					'exception_file' => $e->getFile(),
+					'exception_line' => $e->getLine(),
+					'debug_message' => self::load_debug_message($e->getMessage()),
+				],
 			];
 
 			echo $data['error_message'].'<br>';
-			echo '<b>'.$data['exception_message'].'</b> in <b>'.$data['exception_file'].'</b> on line <b>'.$data['exception_line'].'</b><br>';
-			echo $data['debug_message'].'<br>';
+			echo '<b>'.$data['debug']['exception_message'].'</b> in <b>'.$data['debug']['exception_file'].'</b> on line <b>'.$data['debug']['exception_line'].'</b><br>';
+			echo $data['debug']['debug_message'].'<br>';
 		});
 	}
 
