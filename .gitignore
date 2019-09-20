@@ -2,4 +2,5 @@
 !/system
 !/.gitignore
 !/.htaccess
-!/.index.php
+!/fallback.php
+!/index.php

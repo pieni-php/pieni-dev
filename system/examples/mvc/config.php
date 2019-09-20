@@ -1,32 +1,29 @@
 <?php
 return [
 	'packages' => ['application', 'system'],
+	'request' => [
+		'languages' => ['en'],
+		'actors' => ['g'],
+		'param_patterns' => [
+			'page' => [
+				'g' => [
+					'welcome' => [
+						'index' => [],
+					],
+				],
+			],
+			'api' => [
+				'g' => [
+					'welcome' => [
+						'index' => [],
+					],
+				],
+			],
+		],
+	],
 	'pdo' => [
 		'dsn' => 'mysql:dbname=mysql',
 		'username' => 'root',
 		'password' => '',
-	],
-	'debug' => true,
-	'languages' => ['en'],
-	'actors' => ['g'],
-	'actions' => [
-		'page' => [
-			'g' => [
-				'welcome' => [
-					'index' => [
-						'argc' => 0,
-					],
-				],
-			],
-		],
-		'api' => [
-			'g' => [
-				'welcome' => [
-					'index' => [
-						'argc' => 0,
-					],
-				],
-			],
-		],
 	],
 ];

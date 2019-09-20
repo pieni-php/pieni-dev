@@ -1,10 +1,22 @@
 <?php
-file_exists('./application/classes/super_core.php') ?
-	require_once './application/classes/super_core.php' :
-	require_once './system/classes/super_core.php'
-;
-file_exists('./application/classes/core.php') ?
-	require_once './application/classes/core.php' :
-	class_alias('super_core', 'core')
-;
-(new core($_SERVER))->exec_request();
+(function(){
+	$index_config = file_exists('./development_config.php') ? require_once './development_config.php' : [
+		'packages' => ['system/examples/mvc', 'system'],
+	];
+	require_once './fallback.php';
+	$super_dispatcher_path = fallback::get_fallback_path([
+		$index_config['packages'],
+		['super_dispatcher.php'],
+	]);
+	require_once $super_dispatcher_path;
+	$dispatcher_path = fallback::get_fallback_path([
+		$index_config['packages'],
+		['dispatcher.php'],
+	]);
+	if ($dispatcher_path !== null) {
+		require_once $dispatcher_path;
+	} else {
+		class_alias('super_dispatcher', 'dispatcher');
+	}
+	(new dispatcher())->dispatch($index_config);
+})();

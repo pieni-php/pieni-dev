@@ -4,16 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>pieni - PHP Framework</title>
-    <script src="<?php $this->asset('jquery.min.js'); ?>"></script>
-    <script src="<?php $this->asset('bootstrap.min.js'); ?>"></script>
-    <link rel="stylesheet" href="<?php $this->asset('bootstrap.min.css'); ?>">
-    <link rel="shortcut icon" type="image/svg+xml" sizes="any" href="<?php $this->asset('favicon.svg'); ?>" />
-<?php $this->load_target_controller($this->request['target']); ?>
+    <script src="<?php $this->load_referable('jquery.min.js'); ?>"></script>
+    <script src="<?php $this->load_referable('bootstrap.min.js'); ?>"></script>
+    <link rel="stylesheet" href="<?php $this->load_referable('bootstrap.min.css'); ?>">
+<?php $this->exec_action_method($this->config, $this->request); ?>
   </head>
   <body>
 <?php $this->load_view('navbar', $data); ?>
-<?php $this->load_view($this->request['action'], $data, ['target' => $this->request['target']]); ?>
-<?php $this->load_view('modals/error', $data); ?>
-<?php $this->load_view('modals/alert', $data); ?>
-  </body>
+<?php $this->load_view($segments['action'], $data); ?>  </body>
 </html>
