@@ -9,9 +9,27 @@ class super_exception_handler {
 		});
 		set_exception_handler(function($e) {
 // リクエストタイプで処理を分けたい
+			echo self::load_error_message($e->getMessage()).'<br>';
 			echo '<b>'.$e->getMessage().'</b> in <b>'.$e->getFile().'</b> on line <b>'.$e->getLine().'</b><br>';
 			echo self::load_debug_message($e->getMessage()).'<br>';
 		});
+	}
+
+	protected static function load_error_message($errstr)
+	{
+		$error_message_path = fallback::get_fallback_path([
+			['system'],
+			['error_messages'],
+			[$errstr.'.php'],
+		]);
+		if ($error_message_path !== null) {
+			$data = self::$data;
+			ob_start();
+			require_once $error_message_path;
+			return ob_get_clean();
+		} else {
+			return '';
+		}
 	}
 
 	protected static function load_debug_message($errstr)
