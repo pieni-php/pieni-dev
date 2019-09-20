@@ -8,6 +8,18 @@ class super_view {
 		$this->request = $request;
 	}
 
+	public function initialize_exception_handler()
+	{
+		exception_handler::initialize();
+		return $this;
+	}
+
+	public function validate_request()
+	{
+		dispatcher::validate_request($this->config, $this->request);
+		return $this;
+	}
+
 	public function load_view($view_name, $data = [])
 	{
 		$segments = $this->request;

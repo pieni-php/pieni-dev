@@ -8,6 +8,18 @@ class super_model {
 		$this->request = $request;
 	}
 
+	public function initialize_exception_handler()
+	{
+		exception_handler::initialize();
+		return $this;
+	}
+
+	public function validate_request()
+	{
+		dispatcher::validate_request($this->config, $this->request);
+		return $this;
+	}
+
 	public function model($model_name)
 	{
 		$model_class_name = $model_name.'_model';

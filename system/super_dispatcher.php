@@ -3,24 +3,17 @@ class super_dispatcher {
 	public function dispatch($index_config)
 	{
 		$config = $this->load_config($index_config);
-		$this->initialize_exception_handler($config);
 		if (file_exists('./development_config.php')) {
 			$config = array_replace_recursive($config, require './development_config.php');
 		}
 		$request = $this->get_request($config);
-		$this->validate_request($config, $request);
+		$this->load_super_exception_handler_class($config);
+		$this->load_exception_handler_class($config);
 		if ($request['type'] === 'page') {
 			$this->exec_page_request($config, $request);
 		} else {
 			$this->exec_api_request($config, $request);
 		}
-	}
-
-	protected function initialize_exception_handler($config)
-	{
-		$this->load_super_exception_handler_class($config);
-		$this->load_exception_handler_class($config);
-		exception_handler::initialize();
 	}
 
 	protected function load_config($index_config)
@@ -82,26 +75,11 @@ class super_dispatcher {
 		return $request;
 	}
 
-	protected function validate_request($config, $request)
-	{
-		if (!isset($config['request']['param_patterns'][$request['type']][$request['actor']][$request['target']][$request['action']])) {
-			exception_handler::throw_exception('invalid_request');
-		}
-		if (count($request['params']) !== count($config['request']['param_patterns'][$request['type']][$request['actor']][$request['target']][$request['action']])) {
-			exception_handler::throw_exception('invalid_number_of_params');
-		}
-		foreach ($config['request']['param_patterns'][$request['type']][$request['actor']][$request['target']][$request['action']] as $i => $param_pattern) {
-			if (!preg_match($param_pattern, $request['params'][$i])) {
-				exception_handler::throw_exception('invalid_params');
-			}
-		}
-	}
-
 	protected function exec_page_request($config, $request)
 	{
 		$this->load_super_view_class($config);
 		$this->load_view_class($config);
-		(new view($config, $request))->load_view('template');
+		(new view($config, $request))->initialize_exception_handler()->validate_request()->load_view('template');
 	}
 
 	protected function load_super_view_class($config)
@@ -134,7 +112,7 @@ class super_dispatcher {
 		$this->load_model_class($config);
 		$this->load_super_target_model_class($config, $request['target']);
 		$this->load_target_model_class($config, $request['target']);
-		$result = call_user_func_array([(new model($config, $request))->model($request['target']), $request['action']], $request['params']);
+		$result = call_user_func_array([(new model($config, $request))->initialize_exception_handler()->validate_request()->model($request['target']), $request['action']], $request['params']);
 		echo json_encode($result, JSON_UNESCAPED_UNICODE);
 	}
 
@@ -187,6 +165,21 @@ class super_dispatcher {
 			class_alias('super_'.$model_name.'_model', $model_name.'_model');
 		} else {
 			exception_handler::throw_exception('model_not_found', ['model_name' => $model_name]);
+		}
+	}
+
+	public static function validate_request($config, $request)
+	{
+		if (!isset($config['request']['param_patterns'][$request['type']][$request['actor']][$request['target']][$request['action']])) {
+			exception_handler::throw_exception('invalid_request');
+		}
+		if (count($request['params']) !== count($config['request']['param_patterns'][$request['type']][$request['actor']][$request['target']][$request['action']])) {
+			exception_handler::throw_exception('invalid_number_of_params');
+		}
+		foreach ($config['request']['param_patterns'][$request['type']][$request['actor']][$request['target']][$request['action']] as $i => $param_pattern) {
+			if (!preg_match($param_pattern, $request['params'][$i])) {
+				exception_handler::throw_exception('invalid_params');
+			}
 		}
 	}
 }
