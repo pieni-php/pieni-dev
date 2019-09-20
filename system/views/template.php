@@ -11,5 +11,6 @@
   </head>
   <body>
 <?php $this->load_view('navbar', $data); ?>
-<?php $this->load_view($segments['action'], $data); ?>  </body>
+<?php $this->load_view($segments['action'], $data); ?>
+  </body>
 </html>

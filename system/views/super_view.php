@@ -10,7 +10,9 @@ class super_view {
 
 	public function initialize_exception_handler()
 	{
-		exception_handler::initialize();
+		exception_handler::initialize(function($data){
+			$this->load_view('exception', $data);
+		});
 		return $this;
 	}
 

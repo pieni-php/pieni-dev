@@ -1,9 +1,11 @@
 <?php
 class super_exception_handler {
 	protected static $data = [];
+	protected static $exception_handler = [];
 
-	public static function initialize()
+	public static function initialize($exception_handler)
 	{
+		self::$exception_handler = $exception_handler;
 		set_error_handler(function($errno, $errstr, $errfile, $errline, $errcontext) {
 			throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
 		});
@@ -17,10 +19,7 @@ class super_exception_handler {
 					'debug_message' => self::load_debug_message($e->getMessage()),
 				],
 			];
-
-			echo $data['error_message'].'<br>';
-			echo '<b>'.$data['debug']['exception_message'].'</b> in <b>'.$data['debug']['exception_file'].'</b> on line <b>'.$data['debug']['exception_line'].'</b><br>';
-			echo $data['debug']['debug_message'].'<br>';
+			(self::$exception_handler)($data);
 		});
 	}
 
