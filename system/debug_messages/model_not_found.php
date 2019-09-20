@@ -1,1 +1,2 @@
-Model '<?php echo $data['model_name']; ?>' not found
+<?php echo $data['model_name']; ?>モデルがみつかりません。
+

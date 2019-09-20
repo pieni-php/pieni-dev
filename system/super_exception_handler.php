@@ -8,6 +8,7 @@ class super_exception_handler {
 			throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
 		});
 		set_exception_handler(function($e) {
+// リクエストタイプで処理を分けたい
 			echo '<b>'.$e->getMessage().'</b> in <b>'.$e->getFile().'</b> on line <b>'.$e->getLine().'</b><br>';
 			echo self::load_debug_message($e->getMessage()).'<br>';
 		});
@@ -30,7 +31,7 @@ class super_exception_handler {
 		}
 	}
 
-	public static function throw_exception($exception_name, $data)
+	public static function throw_exception($exception_name, $data = [])
 	{
 		self::$data = $data;
 		$caller = debug_backtrace()[0];

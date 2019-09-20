@@ -8,7 +8,6 @@ class super_dispatcher {
 			$config = array_replace_recursive($config, require './development_config.php');
 		}
 		$request = $this->get_request($config);
-$a = $a;
 		$this->validate_request($config, $request);
 		if ($request['type'] === 'page') {
 			$this->exec_page_request($config, $request);
