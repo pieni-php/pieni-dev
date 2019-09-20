@@ -8,7 +8,6 @@ class super_exception_handler {
 			throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
 		});
 		set_exception_handler(function($e) {
-// リクエストタイプで処理を分けたい
 			echo self::load_error_message($e->getMessage()).'<br>';
 			echo '<b>'.$e->getMessage().'</b> in <b>'.$e->getFile().'</b> on line <b>'.$e->getLine().'</b><br>';
 			echo self::load_debug_message($e->getMessage()).'<br>';
