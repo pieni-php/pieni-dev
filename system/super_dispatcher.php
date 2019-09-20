@@ -3,11 +3,7 @@ class super_dispatcher {
 	public function dispatch($index_config)
 	{
 		$config = $this->load_config($index_config);
-
-		$this->load_super_exception_handler_class($config);
-		$this->load_exception_handler_class($config);
-		exception_handler::initialize();
-
+		$this->initialize_exception_handler($config);
 		if (file_exists('./development_config.php')) {
 			$config = array_replace_recursive($config, require './development_config.php');
 		}
@@ -18,6 +14,13 @@ class super_dispatcher {
 		} else {
 			$this->exec_api_request($config, $request);
 		}
+	}
+
+	protected function initialize_exception_handler($config)
+	{
+		$this->load_super_exception_handler_class($config);
+		$this->load_exception_handler_class($config);
+		exception_handler::initialize();
 	}
 
 	protected function load_config($index_config)
