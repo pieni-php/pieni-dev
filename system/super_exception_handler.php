@@ -8,9 +8,15 @@ class super_exception_handler {
 			throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
 		});
 		set_exception_handler(function($e) {
-			echo self::load_error_message($e->getMessage()).'<br>';
-			echo '<b>'.$e->getMessage().'</b> in <b>'.$e->getFile().'</b> on line <b>'.$e->getLine().'</b><br>';
-			echo self::load_debug_message($e->getMessage()).'<br>';
+			$error_message = self::load_error_message($e->getMessage());
+			$exception_message = $e->getMessage();
+			$exception_file = $e->getFile();
+			$exception_line = $e->getLine();
+			$debug_message = self::load_debug_message($e->getMessage());
+
+			echo $error_message.'<br>';
+			echo '<b>'.$exception_message.'</b> in <b>'.$exception_file.'</b> on line <b>'.$exception_line.'</b><br>';
+			echo $debug_message.'<br>';
 		});
 	}
 
