@@ -13,7 +13,7 @@ class super_exception_handler {
 			throw new ErrorException($error_msg, 0, $error_no, $error_file, $error_line);
 		});
 		set_exception_handler(function($e) {
-			echo '<b>Code:'.$e->getCode().'</b> '.$e->getMessage().' in <b>'.$e->getFile().'</b> on line <b>'.$e->getLine().'</b>';
+			echo '<b>'.self::$exception_names[$e->getCode()].'</b> '.$e->getMessage().' in <b>'.$e->getFile().'</b> on line <b>'.$e->getLine().'</b>';
 		});
 	}
 
