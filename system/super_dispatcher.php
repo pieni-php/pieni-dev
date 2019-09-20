@@ -8,6 +8,7 @@ class super_dispatcher {
 			$config = array_replace_recursive($config, require './development_config.php');
 		}
 		$request = $this->get_request($config);
+$a = $a;
 		$this->validate_request($config, $request);
 		if ($request['type'] === 'page') {
 			$this->exec_page_request($config, $request);
@@ -186,7 +187,7 @@ class super_dispatcher {
 		} elseif (class_exists('super_'.$model_name.'_model')) {
 			class_alias('super_'.$model_name.'_model', $model_name.'_model');
 		} else {
-			throw new Exception('Model "'.$model_name.'" not found');
+			exception_handler::throw_exception('model_not_found', ['model_name' => $model_name]);
 		}
 	}
 }

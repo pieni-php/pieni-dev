@@ -1,25 +1,39 @@
 <?php
 class super_exception_handler {
-	protected static $exception_names = [
-		'undefined_exception',
-		'invalid_request',
-		'invalid_number_of_params',
-		'invalid_params',
-	];
+	protected static $data = [];
 
 	public static function initialize()
 	{
-		set_error_handler(function($error_no, $error_msg, $error_file, $error_line, $error_vars) {
-			throw new ErrorException($error_msg, 0, $error_no, $error_file, $error_line);
+		set_error_handler(function($errno, $errstr, $errfile, $errline, $errcontext) {
+			throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
 		});
 		set_exception_handler(function($e) {
-			echo '<b>'.self::$exception_names[$e->getCode()].'</b> '.$e->getMessage().' in <b>'.$e->getFile().'</b> on line <b>'.$e->getLine().'</b>';
+			echo '<b>'.$e->getMessage().'</b> in <b>'.$e->getFile().'</b> on line <b>'.$e->getLine().'</b><br>';
+			echo self::load_debug_message($e->getMessage()).'<br>';
 		});
 	}
 
-	public static function throw_exception($exception_name)
+	protected static function load_debug_message($errstr)
 	{
+		$debug_message_path = fallback::get_fallback_path([
+			['system'],
+			['debug_messages'],
+			[$errstr.'.php'],
+		]);
+		if ($debug_message_path !== null) {
+			$data = self::$data;
+			ob_start();
+			require_once $debug_message_path;
+			return ob_get_clean();
+		} else {
+			return '';
+		}
+	}
+
+	public static function throw_exception($exception_name, $data)
+	{
+		self::$data = $data;
 		$caller = debug_backtrace()[0];
-		throw new ErrorException('exception message', array_search($exception_name, self::$exception_names), 0, $caller['file'], $caller['line']);
+		throw new ErrorException($exception_name, 0, 0, $caller['file'], $caller['line']);
 	}
 }
