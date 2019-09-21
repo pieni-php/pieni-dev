@@ -11,6 +11,7 @@
   </head>
   <body>
 <?php $this->load_view('navbar', $data); ?>
-<?php $this->load_view($segments['action'], $data); ?>
+<?php $this->load_view($segments['action'], $data, $segments); ?>
+<?php $this->load_view('exception_modal', $data); ?>
   </body>
 </html>

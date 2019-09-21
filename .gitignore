@@ -2,5 +2,6 @@
 !/system
 !/.gitignore
 !/.htaccess
+!/README.md
 !/fallback.php
 !/index.php

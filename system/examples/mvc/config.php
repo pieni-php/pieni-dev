@@ -1,5 +1,6 @@
 <?php
 return [
+	'debug' => true,
 	'packages' => ['application', 'system'],
 	'request' => [
 		'languages' => ['en'],

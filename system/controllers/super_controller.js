@@ -22,4 +22,16 @@ class super_controller {
 		href += '/' + path;
 		return href;
 	}
+
+	show_exception_modal(data)
+	{
+		$('#exception_modal .error_message').text(data.error_message);
+		if (this.config.debug) {
+			$('#exception_modal .debug .exception_message').text(data.debug.exception_message);
+			$('#exception_modal .debug .exception_file').text(data.debug.exception_file);
+			$('#exception_modal .debug .exception_line').text(data.debug.exception_line);
+			$('#exception_modal .debug .debug_message').text(data.debug.debug_message);
+		}
+		$('#exception_modal').modal('show');
+	}
 }

@@ -1,7 +1,7 @@
 <div class="container">
   <h1>What is happening on this page?</h1>
   <div class="row">
-    <div class="col">
+    <div class="col-lg-6">
       <ol>
         <li>The browser requests static contents to the view.</li>
         <li>The view receives request from the browser and responds with static contents to the browser.</li>
@@ -11,7 +11,7 @@
         <li>The controller renders dynamic contents from the model.</li>
       </ol>
     </div>
-    <div class="col">
+    <div class="col-lg-6">
       <svg width="260px" height="260px" style="background-color:#ddd;">
         <defs>
           <polygon points="0,0 6,3 0,6 10,3" id="m_tmpl2"/>
@@ -51,5 +51,5 @@
   <h2>Dynamic contents from the model</h2>
   <pre id="result">
   </pre>
-  <div class="alert alert-info">If a database error occurs, set the appropriate values in <i>./application/config.php</i>.</div>
+  <div class="alert alert-info">If a database exception occurs, set the appropriate values in <i>./application/config.php</i>.</div>
 </div>

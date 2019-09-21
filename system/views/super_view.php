@@ -10,8 +10,8 @@ class super_view {
 
 	public function initialize_exception_handler()
 	{
-		exception_handler::initialize(function($data){
-			$this->load_view('exception', $data);
+		exception_handler::initialize($this->config, function($data){
+			$this->load_view('template', $data, ['target' => 'exception', 'action' => 'index', 'params' => []]);
 		});
 		return $this;
 	}
@@ -22,9 +22,9 @@ class super_view {
 		return $this;
 	}
 
-	public function load_view($view_name, $data = [])
+	public function load_view($view_name, $data = [], $replace_segments = [])
 	{
-		$segments = $this->request;
+		$segments = array_merge($this->request, $replace_segments);
 		$view_path = fallback::get_fallback_path([
 			$this->config['packages'],
 			['views'],

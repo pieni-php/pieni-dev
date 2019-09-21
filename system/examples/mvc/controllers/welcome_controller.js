@@ -7,8 +7,7 @@ class welcome_controller extends controller {
 				$('#result').text(JSON.stringify(JSON.parse(result), null, 2));
 			},
 			error: (jqXHR) => {
-				const error = JSON.parse(jqXHR.responseText);
-				this.load_error(error.response_code, error.debug);
+				this.show_exception_modal(JSON.parse(jqXHR.responseText));
 			},
 		});
 	}

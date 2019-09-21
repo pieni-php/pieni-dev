@@ -10,7 +10,9 @@ class super_model {
 
 	public function initialize_exception_handler()
 	{
-		exception_handler::initialize();
+		exception_handler::initialize($this->config, function($data){
+			echo json_encode($data, JSON_UNESCAPED_UNICODE);
+		});
 		return $this;
 	}
 
