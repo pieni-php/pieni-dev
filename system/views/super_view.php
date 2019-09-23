@@ -44,16 +44,20 @@ class super_view {
 
 	protected function exec_action_method($config, $request)
 	{
+		ob_start();
 		$this->load_super_controller_class($config);
 		$this->load_controller_class($config);
 		$this->load_super_target_controller_class($config, $request['target']);
 		$this->load_target_controller_class($config, $request['target']);
 		if ($this->loaded_controller_class_names !== []) {
+			ob_flush();
 			$params_str = $request['params'] === [] ? '' : '\''.implode('\', \'', $request['params']).'\'';
 			echo '<script>$(() => new controller('.
 				json_encode($config, JSON_UNESCAPED_UNICODE).', '.
 				json_encode($request, JSON_UNESCAPED_UNICODE).
 			').controller(\''.$request['target'].'\').'.$request['action'].'('.$params_str.'));</script>'."\n";
+		} else {
+			ob_end_clean();
 		}
 	}
 

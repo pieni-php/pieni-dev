@@ -12,6 +12,6 @@
   <body>
 <?php $this->load_view('navbar', $data); ?>
 <?php $this->load_view($segments['action'], $data, $segments); ?>
-<?php $this->load_view('exception_modal', $data); ?>
+<?php if ($this->loaded_controller_class_names !== []) $this->load_view('exception_modal', $data); ?>
   </body>
 </html>
