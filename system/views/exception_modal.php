@@ -13,7 +13,7 @@
         <div class="card debug">
           <div class="card-body">
             <p class="card-text"><code class="exception_message"></code> in <code class="exception_file"></code> on line <code class="exception_line"></code></p>
-            <p class="card-text debug_message"></p>
+            <div class="debug_message"></div>
             <p class="card-text small text-muted text-right">To hide this message, set <code>debug</code> to <code>false</code> in <code>config.php</code>.</p>
           </div>
         </div>

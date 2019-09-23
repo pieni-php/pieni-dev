@@ -11,6 +11,15 @@ class fallback {
 		return null;
 	}
 
+	public static function get_all_fallback_pathes($seeds)
+	{
+		$all_fallback_pathes = [];
+		foreach (self::get_cartesian_product($seeds) as $segments) {
+			$all_fallback_pathes[] = preg_replace('#/+#', '/', trim(implode('/', $segments), '/'));
+		}
+		return $all_fallback_pathes;
+	}
+
 	protected static function get_cartesian_product($seeds)
 	{
 		$cartesian_product = [];

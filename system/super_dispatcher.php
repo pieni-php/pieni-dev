@@ -164,21 +164,22 @@ class super_dispatcher {
 		} elseif (class_exists('super_'.$model_name.'_model')) {
 			class_alias('super_'.$model_name.'_model', $model_name.'_model');
 		} else {
-			exception_handler::throw_exception('model_not_found', ['model_name' => $model_name]);
+			(new model($config, []))->initialize_exception_handler();
+			exception_handler::throw_exception('model_not_found', ['config' => $config, 'model_name' => $model_name]);
 		}
 	}
 
 	public static function validate_request($config, $request)
 	{
 		if (!isset($config['request']['param_patterns'][$request['type']][$request['actor']][$request['target']][$request['action']])) {
-			exception_handler::throw_exception('invalid_request');
+			exception_handler::throw_exception('invalid_request', ['config' => $config, 'request' => $request], 404, 0);
 		}
 		if (count($request['params']) !== count($config['request']['param_patterns'][$request['type']][$request['actor']][$request['target']][$request['action']])) {
-			exception_handler::throw_exception('invalid_number_of_params');
+			exception_handler::throw_exception('invalid_number_of_request_params', ['config' => $config, 'request' => $request], 404, 0);
 		}
 		foreach ($config['request']['param_patterns'][$request['type']][$request['actor']][$request['target']][$request['action']] as $i => $param_pattern) {
 			if (!preg_match($param_pattern, $request['params'][$i])) {
-				exception_handler::throw_exception('invalid_params');
+				exception_handler::throw_exception('invalid_request_params', ['config' => $config, 'request' => $request], 404, 0);
 			}
 		}
 	}

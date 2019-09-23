@@ -35,15 +35,14 @@ class super_exception_handler {
 		$error_message_path = fallback::get_fallback_path([
 			['system'],
 			['error_messages'],
-			[$errstr.'.php'],
+			[$errstr.'.php', http_response_code().'.php'],
 		]);
 		if ($error_message_path !== null) {
-			$data = self::$data;
 			ob_start();
 			require_once $error_message_path;
 			return ob_get_clean();
 		} else {
-			return 'An exception occurred';
+			return 'An Exception Occurred';
 		}
 	}
 
@@ -60,15 +59,15 @@ class super_exception_handler {
 			require_once $debug_message_path;
 			return ob_get_clean();
 		} else {
-			return 'An exception occurred';
+			return '';
 		}
 	}
 
-	public static function throw_exception($exception_name, $data = [], $response_code = 500)
+	public static function throw_exception($exception_name, $data = [], $response_code = 500, $caller_depth = 1)
 	{
 		http_response_code($response_code);
 		self::$data = $data;
-		$caller = debug_backtrace()[0];
+		$caller = debug_backtrace()[$caller_depth];
 		throw new ErrorException($exception_name, 0, 0, $caller['file'], $caller['line']);
 	}
 }

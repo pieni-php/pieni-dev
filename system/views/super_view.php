@@ -4,6 +4,7 @@ class super_view {
 
 	public function __construct($config, $request)
 	{
+		ob_start();
 		$this->config = $config;
 		$this->request = $request;
 	}
@@ -11,6 +12,7 @@ class super_view {
 	public function initialize_exception_handler()
 	{
 		exception_handler::initialize($this->config, function($data){
+			ob_end_clean();
 			$this->load_view('template', $data, ['target' => 'exception', 'action' => 'index', 'params' => []]);
 		});
 		return $this;
@@ -36,7 +38,7 @@ class super_view {
 		if ($view_path !== null) {
 			return require './'.$view_path;
 		} else {
-			throw new Exception('View "'.$view_name.'" not found');
+			exception_handler::throw_exception('view_not_found', ['config' => $this->config, 'request' => $this->request, 'view_name' => $view_name, 'replace_segments' => $replace_segments]);
 		}
 	}
 
@@ -107,21 +109,21 @@ class super_view {
 		}
 	}
 
-	protected function load_referable($referable_file)
+	protected function load_referable($referable_file, $replace_segments = [])
 	{
+		$segments = array_merge($this->request, $replace_segments);
 		$referable_path = fallback::get_fallback_path([
 			$this->config['packages'],
 			['referables'],
-			[$this->request['language'], ''],
-			[$this->request['actor'], ''],
-			[$this->request['target'], ''],
+			[$segments['language'], ''],
+			[$segments['actor'], ''],
+			[$segments['target'], ''],
 			[$referable_file],
 		]);
 		if ($referable_path !== null) {
 			$this->href($referable_path);
 		} else {
-			throw new Exception('Referable "'.$referable_file.'" not found');
-		}
+			exception_handler::throw_exception('referable_not_found', ['config' => $this->config, 'request' => $this->request, 'referable_file' => $referable_file, 'replace_segments' => $replace_segments]);		}
 	}
 
 	protected function href($path, $replace_segments = [], $return = false)
