@@ -2,6 +2,7 @@
 !/system
 !/.gitignore
 !/.htaccess
+!/.travis.yml
 !/README.md
 !/fallback.php
 !/index.php
