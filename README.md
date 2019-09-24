@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/pieni-php/pieni-dev.svg?branch=master)](https://travis-ci.org/pieni-php/pieni-dev)
+
 # リクエストの流れ
 
 ## Apache HTTPサーバ分散設定ファイル(./.htaccess)
