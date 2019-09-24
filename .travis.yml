@@ -1,4 +1,4 @@
 language: php
 php:
 - 7.0
-script: true
+script: php ./system/examples/mvc/test.php
