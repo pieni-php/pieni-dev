@@ -6,9 +6,13 @@ class super_dispatcher {
 		if (file_exists('./development_config.php')) {
 			$config = array_replace_recursive($config, require './development_config.php');
 		}
-		$request = $this->get_request($config);
 		$this->load_super_exception_handler_class($config);
 		$this->load_exception_handler_class($config);
+		$request = $this->get_request($config);
+		$this->load_super_session_handler_class($config);
+		$this->load_session_handler_class($config);
+		session_set_save_handler(new super_session_handler($config, $request));
+		session_start();
 		if ($request['type'] === 'page') {
 			$this->exec_page_request($config, $request);
 		} else {
@@ -23,6 +27,28 @@ class super_dispatcher {
 			['config.php'],
 		]);
 		return require_once './'.$config_path;
+	}
+
+	protected function load_super_session_handler_class($config)
+	{
+		$super_session_handler_path = fallback::get_fallback_path([
+			$config['packages'],
+			['super_session_handler.php'],
+		]);
+		require_once './'.$super_session_handler_path;
+	}
+
+	protected function load_session_handler_class($config)
+	{
+		$session_handler_path = fallback::get_fallback_path([
+			$config['packages'],
+			['session_handler.php'],
+		]);
+		if ($session_handler_path !== null) {
+			require_once './'.$session_handler_path;
+		} else {
+			class_alias('super_session_handler', 'session_handler');
+		}
 	}
 
 	protected function load_super_exception_handler_class($config)
@@ -49,8 +75,10 @@ class super_dispatcher {
 
 	protected function get_request($config)
 	{
-		$segments = $_SERVER['PATH_INFO'] === '/' ? [] : explode('/', trim($_SERVER['PATH_INFO'], '/'));
 		$request = [];
+		$timeofday = gettimeofday();
+		$request['microtime'] = $timeofday['sec'] * 1000000 + $timeofday['usec'];
+		$segments = $_SERVER['PATH_INFO'] === '/' ? [] : explode('/', trim($_SERVER['PATH_INFO'], '/'));
 		$request['base_url'] = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']);
 		$request['type'] = isset($segments[0]) && $segments[0] === 'api' ? array_shift($segments) : 'page';
 		$request['language'] = isset($segments[0]) && in_array($segments[0], array_slice($config['request']['languages'], 1)) ? array_shift($segments) : $config['request']['languages'][0];
