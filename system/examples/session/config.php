@@ -20,4 +20,8 @@ return [
 		'username' => 'root',
 		'password' => '',
 	],
+	'session' => [
+		'use' => true,
+		'database' => true,
+	],
 ];

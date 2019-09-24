@@ -9,10 +9,14 @@ class super_dispatcher {
 		$this->load_super_exception_handler_class($config);
 		$this->load_exception_handler_class($config);
 		$request = $this->get_request($config);
-		$this->load_super_session_handler_class($config);
-		$this->load_session_handler_class($config);
-		session_set_save_handler(new super_session_handler($config, $request));
-		session_start();
+		if (isset($config['session']['use']) && $config['session']['use']) {
+			if (isset($config['session']['database']) && $config['session']['database']) {
+				$this->load_super_session_handler_class($config);
+				$this->load_session_handler_class($config);
+				session_set_save_handler(new super_session_handler($config, $request));
+			}
+			session_start();
+		}
 		if ($request['type'] === 'page') {
 			$this->exec_page_request($config, $request);
 		} else {
