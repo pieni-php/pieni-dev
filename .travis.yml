@@ -18,4 +18,4 @@ dist: bionic
 sudo: required
 
 script:
-  - php php ./system/examples/mvc/test.php
+  - php ./system/examples/mvc/test.php
