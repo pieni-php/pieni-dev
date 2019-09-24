@@ -52,7 +52,6 @@ $config = require_once __DIR__.'/config.php';
 if (file_exists('./development_config.php')) {
 	$config = array_replace_recursive($config, require './development_config.php');
 }
-/*
 $dbh = new PDO(
 	$config['pdo']['dsn'],
 	$config['pdo']['username'],
@@ -62,7 +61,6 @@ $dbh = new PDO(
 		PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
 	]
 );
-*/
 foreach (explode("\n", trim(shell_exec('find '.__DIR__.'/tests -type f -path \'*\.php\' -print0 | xargs -0 ls -t'))) as $test_file) {
 	echo $test_file."\n";
 	require_once $test_file;
