@@ -1,7 +1,7 @@
 <?php
 (function(){
 	$index_config = file_exists('./development_config.php') ? require_once './development_config.php' : [
-		'packages' => ['system/examples/mvc', 'system'],
+		'packages' => ['application', 'system'],
 	];
 	require_once './fallback.php';
 	$super_dispatcher_path = fallback::get_fallback_path([
