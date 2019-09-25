@@ -51,5 +51,5 @@
   <h2>Dynamic contents from the model</h2>
   <pre id="result">
   </pre>
-  <div class="alert alert-info">If a database exception occurs, set the appropriate values in <i>./application/config.php</i>.</div>
+  <div class="alert alert-info">If a database exception occurs, set the appropriate values in <code>./application/config.php</code>.</div>
 </div>

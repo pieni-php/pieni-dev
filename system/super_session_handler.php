@@ -31,19 +31,27 @@ class super_session_handler implements SessionHandlerInterface {
 		$sth = $this->dbh->prepare('DELETE FROM `session` WHERE `session_id` = :id');
 		$sth->bindValue(':id', $id, PDO::PARAM_STR);
 		$sth->execute();
+		session_unset();
 		return true;
 	}
 
 	public function gc($maxlifetime)
 	{
-		$this->dbh->beginTransaction();
-		$sth = $this->dbh->prepare('DELETE FROM `session` WHERE `session_microtime` < :microtime');
+		$sth = $this->dbh->prepare('SELECT COUNT(*) AS `count` FROM `session` WHERE `session_id` = :id AND `session_microtime` < :microtime');
+		$sth->bindValue(':id', session_id(), PDO::PARAM_STR);
 		$sth->bindValue(':microtime', $this->request['microtime'] - $maxlifetime * 1000000, PDO::PARAM_INT);
 		$sth->execute();
-		$sth = $this->dbh->prepare('DELETE FROM `auth_session` NATURAL JOIN `session` WHERE `session_microtime` < :microtime');
+		if ($sth->fetch(PDO::FETCH_ASSOC)['count'] > 0) {
+			session_unset();
+		}
+		$this->dbh->beginTransaction();
+		$sth = $this->dbh->prepare('DELETE `auth_session` FROM `auth_session` NATURAL JOIN `session` WHERE `session_microtime` < :microtime');
 		$sth->bindValue(':microtime', $this->request['microtime'] - $maxlifetime * 1000000, PDO::PARAM_INT);
 		$sth->execute();
 		$this->dbh->commit();
+		$sth = $this->dbh->prepare('DELETE FROM `session` WHERE `session_microtime` < :microtime');
+		$sth->bindValue(':microtime', $this->request['microtime'] - $maxlifetime * 1000000, PDO::PARAM_INT);
+		$sth->execute();
 		return true;
 	}
 

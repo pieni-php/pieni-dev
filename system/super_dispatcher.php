@@ -15,7 +15,15 @@ class super_dispatcher {
 				$this->load_session_handler_class($config);
 				session_set_save_handler(new super_session_handler($config, $request));
 			}
+			if (isset($config['session']['lifetime'])) {
+				ini_set('session.gc_maxlifetime', $config['session']['lifetime']);
+			}
+			session_set_cookie_params($config['session']['lifetime'], dirname($_SERVER['SCRIPT_NAME']), $_SERVER['SERVER_NAME']);
+			if (isset($_COOKIE['PHPSESSID'])) {
+				setcookie('PHPSESSID', $_COOKIE['PHPSESSID'], intval($request['microtime'] / 1000000 + $config['session']['lifetime']), dirname($_SERVER['SCRIPT_NAME']), $_SERVER['SERVER_NAME']);
+			}
 			session_start();
+			session_gc();
 		}
 		if ($request['type'] === 'page') {
 			$this->exec_page_request($config, $request);

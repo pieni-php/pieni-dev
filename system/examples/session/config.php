@@ -22,6 +22,7 @@ return [
 	],
 	'session' => [
 		'use' => true,
+		'lifetime' => 3,
 		'database' => true,
 	],
 ];
