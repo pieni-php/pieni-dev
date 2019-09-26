@@ -7,5 +7,6 @@
   <ol>
     <li><code>./system/examples/mvc/</code></li>
     <li><code>./system/examples/session/</code></li>
+    <li><code>./system/examples/mail/</code></li>
   </ol>
 </div>
