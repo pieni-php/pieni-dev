@@ -18,4 +18,5 @@ dist: bionic
 sudo: required
 
 script:
-  - cp -r ./system/examples/mvc ./application && php ./application/test.php
+  - cp -r ./system/examples/mvc ./application && php ./application/test.php && rm -r ./application
+  - cp -r ./system/examples/session ./application && php ./application/test.php && rm -r ./application
