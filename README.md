@@ -1,5 +1,11 @@
 [![Build Status](https://travis-ci.org/pieni-php/pieni-dev.svg?branch=master)](https://travis-ci.org/pieni-php/pieni-dev)
 
+# システム要件
+- Ubuntu 18.04LTS
+- Appache 2.4 (mod_rewriteが必要)
+- MySQL 5.7
+- PHP 7.2
+
 # リクエストの流れ
 
 ## Apache HTTPサーバ分散設定ファイル(./.htaccess)
