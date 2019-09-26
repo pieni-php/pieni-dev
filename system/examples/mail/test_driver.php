@@ -9,6 +9,8 @@
 	$_COOKIE = [
 		'PHPSESSID' => 'xxxxxxxx',
 	];
+	$GLOBALS['test_params'] = [
+	];
 	if (isset($argv[2])) {
 		$replace_params = json_decode($argv[2], true);
 		foreach ($replace_params as $key => $value) {
