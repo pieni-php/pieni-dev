@@ -89,7 +89,7 @@ class super_dispatcher {
 	{
 		$request = [];
 		$timeofday = gettimeofday();
-		$request['microtime'] = $timeofday['sec'] * 1000000 + $timeofday['usec'];
+		$request['microtime'] = isset($GLOBALS['test_params']['microtime']) ? $GLOBALS['test_params']['microtime'] : $timeofday['sec'] * 1000000 + $timeofday['usec'];
 		$segments = $_SERVER['PATH_INFO'] === '/' ? [] : explode('/', trim($_SERVER['PATH_INFO'], '/'));
 		$request['base_url'] = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']);
 		$request['type'] = isset($segments[0]) && $segments[0] === 'api' ? array_shift($segments) : 'page';
