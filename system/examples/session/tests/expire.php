@@ -12,7 +12,7 @@ equals_to(
 		],
 	]
 );
-exec_request('/', ['microtime' => 86400 * 1000000]);
+exec_request('/', ['microtime' => $config['session']['lifetime'] * 1000000]);
 equals_to(
 	'Count is 0 (expired)',
 	rows($dbh, 'SELECT `session_data` FROM `session`'),

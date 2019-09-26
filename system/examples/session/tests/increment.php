@@ -12,7 +12,7 @@ equals_to(
 		],
 	]
 );
-exec_request('/', ['microtime' => 86400 * 1000000 - 1]);
+exec_request('/', ['microtime' => $config['session']['lifetime'] * 1000000 - 1]);
 equals_to(
 	'Count is 1',
 	rows($dbh, 'SELECT `session_data` FROM `session`'),
