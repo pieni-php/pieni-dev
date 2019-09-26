@@ -1,7 +1,7 @@
 <?php
 function restore($config, $file)
 {
-	echo shell_exec('mysql -u'.$config['pdo']['username'].' '.($config['pdo']['password'] !== '' ? ' -p'.$config['pdo']['password'] : '').'< '.$file);
+	echo shell_exec('mysql -u'.$config['pdo']['username'].' '.($config['pdo']['password'] !== '' ? ' -p'.$config['pdo']['password'] : '').' < '.$file);
 }
 
 function rows($dbh, $statement)
@@ -57,6 +57,12 @@ $config = require_once __DIR__.'/config.php';
 if (file_exists('./development_config.php')) {
 	$config = array_replace_recursive($config, require './development_config.php');
 }
+$dsn = [];
+foreach (explode(';', explode(':', $config['pdo']['dsn'])[1]) as $key_value) {
+	[$key, $value] = explode('=', $key_value);
+	$dsn[$key] = $value;
+}
+shell_exec('mysql -u'.$config['pdo']['username'].($config['pdo']['password'] !== '' ? ' -p'.$config['pdo']['password'] : '').' -e \'DROP DATABASE IF EXISTS `'.$dsn['dbname'].'`; CREATE DATABASE `'.$dsn['dbname'].'`;\'');
 $dbh = new PDO(
 	$config['pdo']['dsn'],
 	$config['pdo']['username'],
