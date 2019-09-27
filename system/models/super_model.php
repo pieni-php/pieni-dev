@@ -77,7 +77,7 @@ class super_model {
 			'additional_headers' => isset($data['additional_headers']) ? $data['additional_headers'] : '',
 			'additional_parameter' => isset($data['additional_parameter']) ? $data['additional_parameter'] : ''
 		];
-		if (!isset($GLOBALS['test_params'])) {
+		if (!isset($GLOBALS['test_index_config'])) {
 			if (!call_user_func_array('mb_send_mail', array_values($params))) {
 				exception_handler::throw_exception('send_mail_failed', ['config' => $this->config, 'request' => $this->request, 'mail_name' => $mail_name, 'data' => $data, 'params' => $params]);
 			}
