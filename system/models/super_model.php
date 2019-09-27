@@ -54,7 +54,7 @@ class super_model {
 		if (!isset(self::$dbh))
 		{
 			self::$dbh = new PDO(
-				$this->config['pdo']['dsn'],
+				isset($GLOBALS['test_index_config']) ? preg_replace('/dbname=([^;]+)/', 'dbname=${1}_test', $this->config['pdo']['dsn']) : $this->config['pdo']['dsn'],
 				$this->config['pdo']['username'],
 				$this->config['pdo']['password'],
 				[

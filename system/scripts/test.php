@@ -1,7 +1,7 @@
 <?php
 function restore($config, $file)
 {
-	echo shell_exec('mysql -u'.$config['pdo']['username'].' '.($config['pdo']['password'] !== '' ? ' -p'.$config['pdo']['password'] : '').' < '.$file);
+	echo shell_exec('mysql -u'.$config['pdo']['username'].' '.($config['pdo']['password'] !== '' ? ' -p'.$config['pdo']['password'] : '').' '.$GLOBALS['test_dbname'].' < '.$file);
 }
 
 function rows($dbh, $statement)
@@ -17,7 +17,7 @@ function row($dbh, $statement)
 function exec_request($path_info, $params = [])
 {
 	ob_start();
-	return json_decode(shell_exec('php '.__DIR__.'/test_driver.php '.$path_info.' \''.json_encode($params, JSON_UNESCAPED_UNICODE).'\''), true);
+	return json_decode(shell_exec('php '.__DIR__.'/test_driver.php '.$GLOBALS['argv'][1].' '.$path_info.' \''.json_encode($params, JSON_UNESCAPED_UNICODE).'\''), true);
 }
 
 function succeeded()
@@ -53,19 +53,22 @@ function not_contains($label, $actual_values, $expected_values)
 	$actual_values !== array_replace_recursive($actual_values, $expected_values) ? succeeded() : failed();
 }
 
-$config = require_once __DIR__.'/config.php';
-if (file_exists('./development_config.php')) {
-	$config = array_replace_recursive($config, require './development_config.php');
-}
+$config = require_once './'.$argv[1].'/config.php';
 if (isset($config['pdo'])) {
 	$dsn = [];
-	foreach (explode(';', explode(':', $config['pdo']['dsn'])[1]) as $key_value) {
-		[$key, $value] = explode('=', $key_value);
-		$dsn[$key] = $value;
+	$head_body = explode(':', $config['pdo']['dsn']);
+	if ($head_body[1] !== '') {
+		foreach (explode(';', $head_body[1]) as $key_value) {
+			[$key, $value] = explode('=', $key_value);
+			$dsn[$key] = $value;
+		}
 	}
-	shell_exec('mysql -u'.$config['pdo']['username'].($config['pdo']['password'] !== '' ? ' -p'.$config['pdo']['password'] : '').' -e \'DROP DATABASE IF EXISTS `'.$dsn['dbname'].'`; CREATE DATABASE `'.$dsn['dbname'].'`;\'');
+	if (isset($dsn['dbname'])) {
+		$GLOBALS['test_dbname'] = $dsn['dbname'].'_test';
+		shell_exec('mysql -u'.$config['pdo']['username'].($config['pdo']['password'] !== '' ? ' -p'.$config['pdo']['password'] : '').' -e \'DROP DATABASE IF EXISTS `'.$GLOBALS['test_dbname'].'`; CREATE DATABASE `'.$GLOBALS['test_dbname'].'`;\'');
+	}
 	$dbh = new PDO(
-		$config['pdo']['dsn'],
+		preg_replace('/dbname=([^;]+)/', 'dbname=${1}_test', $config['pdo']['dsn']),
 		$config['pdo']['username'],
 		$config['pdo']['password'],
 		[
@@ -74,8 +77,8 @@ if (isset($config['pdo'])) {
 		]
 	);
 }
-foreach (explode("\n", trim(shell_exec('find '.__DIR__.'/tests -type f -path \'*\.php\' -print0 | xargs -0 ls -t'))) as $test_file) {
-	echo preg_replace('#^'.__DIR__.'/tests/#', '', $test_file)."\n";
+foreach (explode("\n", trim(shell_exec('find '.$argv[1].'/tests -type f -path \'*\.php\' -print0 | xargs -0 ls -t'))) as $test_file) {
+	echo preg_replace('#^'.$argv[1].'/tests/#', '', $test_file)."\n";
 	require_once $test_file;
 	echo "\n";
 }
