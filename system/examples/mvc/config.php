@@ -23,7 +23,7 @@ return [
 		],
 	],
 	'pdo' => [
-		'dsn' => 'mysql:dbname=mysql',
+		'dsn' => 'mysql:',
 		'username' => 'root',
 		'password' => '',
 	],
