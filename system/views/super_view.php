@@ -42,39 +42,39 @@ class super_view {
 		}
 	}
 
-	protected function exec_action_method($config, $request)
+	protected function exec_action_method()
 	{
 		ob_start();
-		$this->load_super_controller_class($config);
-		$this->load_controller_class($config);
-		$this->load_super_target_controller_class($config, $request['target']);
-		$this->load_target_controller_class($config, $request['target']);
+		$this->load_super_controller_class();
+		$this->load_controller_class();
+		$this->load_super_target_controller_class($this->request['target']);
+		$this->load_target_controller_class($this->request['target']);
 		if ($this->loaded_controller_class_names !== []) {
 			ob_flush();
-			$params_str = $request['params'] === [] ? '' : '\''.implode('\', \'', $request['params']).'\'';
+			$params_str = $this->request['params'] === [] ? '' : '\''.implode('\', \'', $this->request['params']).'\'';
 			echo '<script>$(() => new controller('.
-				json_encode($config, JSON_UNESCAPED_UNICODE).', '.
-				json_encode($request, JSON_UNESCAPED_UNICODE).
-			').controller(\''.$request['target'].'\').'.$request['action'].'('.$params_str.'));</script>'."\n";
+				json_encode($this->config, JSON_UNESCAPED_UNICODE).', '.
+				json_encode($this->request, JSON_UNESCAPED_UNICODE).
+			').controller(\''.$this->request['target'].'\').'.$this->request['action'].'('.$params_str.'));</script>'."\n";
 		} else {
 			ob_end_clean();
 		}
 	}
 
-	protected function load_super_controller_class($config)
+	protected function load_super_controller_class()
 	{
 		$super_controller_path = fallback::get_fallback_path([
-			$config['packages'],
+			$this->config['packages'],
 			['controllers'],
 			['super_controller.js'],
 		]);
 		echo '<script src="'.$this->href($super_controller_path, [], true).'"></script>'."\n";
 	}
 
-	protected function load_controller_class($config)
+	protected function load_controller_class()
 	{
 		$controller_path = fallback::get_fallback_path([
-			$config['packages'],
+			$this->config['packages'],
 			['controllers'],
 			['controller.js'],
 		]);
@@ -85,10 +85,10 @@ class super_view {
 		}
 	}
 
-	protected function load_super_target_controller_class($config, $controller_name)
+	protected function load_super_target_controller_class($controller_name)
 	{
 		$super_controller_path = fallback::get_fallback_path([
-			$config['packages'],
+			$this->config['packages'],
 			['controllers'],
 			['super_'.$controller_name.'_controller.js'],
 		]);
@@ -98,10 +98,10 @@ class super_view {
 		}
 	}
 
-	protected function load_target_controller_class($config, $controller_name)
+	protected function load_target_controller_class($controller_name)
 	{
 		$controller_path = fallback::get_fallback_path([
-			$config['packages'],
+			$this->config['packages'],
 			['controllers'],
 			[$controller_name.'_controller.js'],
 		]);

@@ -7,7 +7,7 @@
     <script src="<?php $this->load_referable('jquery.min.js'); ?>"></script>
     <script src="<?php $this->load_referable('bootstrap.min.js'); ?>"></script>
     <link rel="stylesheet" href="<?php $this->load_referable('bootstrap.min.css'); ?>">
-<?php $this->exec_action_method($this->config, $this->request); ?>
+<?php $this->exec_action_method(); ?>
   </head>
   <body>
 <?php $this->load_view('navbar', $data); ?>
