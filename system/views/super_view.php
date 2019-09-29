@@ -73,7 +73,7 @@ class super_view {
 			['controllers'],
 			['super_controller.js'],
 		]);
-		echo '<script src="'.$this->href($super_controller_path, [], true).'"></script>'."\n";
+		echo '<script src="'.$this->href($super_controller_path, ['language' => $this->config['request']['languages'][0], 'actor' => $this->config['request']['actors'][0]], true).'"></script>'."\n";
 	}
 
 	protected function load_controller_class()
@@ -84,7 +84,7 @@ class super_view {
 			['controller.js'],
 		]);
 		if ($controller_path !== null) {
-			echo '<script src="'.$this->href($controller_path, [], true).'"></script>'."\n";
+			echo '<script src="'.$this->href($controller_path, ['language' => $this->config['request']['languages'][0], 'actor' => $this->config['request']['actors'][0]], true).'"></script>'."\n";
 		} else {
 			echo '<script>const controller = super_controller;</script>'."\n";
 		}
@@ -99,7 +99,7 @@ class super_view {
 		]);
 		if ($super_controller_path !== null) {
 			$this->loaded_controller_class_names[] = pathinfo($super_controller_path, PATHINFO_FILENAME);
-			echo '<script src="'.$this->href($super_controller_path, [], true).'"></script>'."\n";
+			echo '<script src="'.$this->href($super_controller_path, ['language' => $this->config['request']['languages'][0], 'actor' => $this->config['request']['actors'][0]], true).'"></script>'."\n";
 		} elseif (isset($this->target['fallback'])) {
 			$super_controller_path = fallback::get_fallback_path([
 				$this->config['packages'],
@@ -108,7 +108,7 @@ class super_view {
 			]);
 			if ($super_controller_path !== null) {
 				$this->loaded_controller_class_names[] = pathinfo($super_controller_path, PATHINFO_FILENAME);
-				echo '<script src="'.$this->href($super_controller_path, [], true).'"></script>'."\n";
+				echo '<script src="'.$this->href($super_controller_path, ['language' => $this->config['request']['languages'][0], 'actor' => $this->config['request']['actors'][0]], true).'"></script>'."\n";
 				echo '<script>const super_'.$controller_name.'_controller = super_'.$this->target['fallback'].'_controller;</script>'."\n";
 			}
 		}
@@ -123,7 +123,7 @@ class super_view {
 		]);
 		if ($controller_path !== null) {
 			$this->loaded_controller_class_names[] = pathinfo($controller_path, PATHINFO_FILENAME);
-			echo '<script src="'.$this->href($controller_path, [], true).'"></script>'."\n";
+			echo '<script src="'.$this->href($controller_path, ['language' => $this->config['request']['languages'][0], 'actor' => $this->config['request']['actors'][0]], true).'"></script>'."\n";
 		} elseif (isset($this->target['fallback'])) {
 			$controller_path = fallback::get_fallback_path([
 				$this->config['packages'],
@@ -132,7 +132,7 @@ class super_view {
 			]);
 			if ($controller_path !== null) {
 				$this->loaded_controller_class_names[] = pathinfo($controller_path, PATHINFO_FILENAME);
-				echo '<script src="'.$this->href($controller_path, [], true).'"></script>'."\n";
+				echo '<script src="'.$this->href($controller_path, ['language' => $this->config['request']['languages'][0], 'actor' => $this->config['request']['actors'][0]], true).'"></script>'."\n";
 				echo '<script>const '.$controller_name.'_controller = '.$this->target['fallback'].'_controller;</script>'."\n";
 			} elseif (in_array('super_'.$controller_name.'_controller', $this->loaded_controller_class_names) || isset($this->target['fallback']) && in_array('super_'.$this->target['fallback'].'_controller', $this->loaded_controller_class_names)) {
 				echo '<script>const '.$controller_name.'_controller = super_'.$controller_name.'_controller;</script>'."\n";
