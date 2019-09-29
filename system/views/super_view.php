@@ -1,12 +1,16 @@
 <?php
 class super_view {
+	protected $config;
+	protected $request;
+	protected $target;
 	protected $loaded_controller_class_names = [];
 
-	public function __construct($config, $request)
+	public function __construct($config, $request, $target)
 	{
 		ob_start();
 		$this->config = $config;
 		$this->request = $request;
+		$this->target = $target;
 	}
 
 	public function initialize_exception_handler()
@@ -32,7 +36,7 @@ class super_view {
 			['views'],
 			[$segments['language'], ''],
 			[$segments['actor'], ''],
-			[$segments['target'], ''],
+			isset($this->target['fallback']) ? [$segments['target'], $this->target['fallback'], ''] : [$segments['target'], ''],
 			[$view_name.'.php'],
 		]);
 		if ($view_path !== null) {
@@ -54,7 +58,8 @@ class super_view {
 			$params_str = $this->request['params'] === [] ? '' : '\''.implode('\', \'', $this->request['params']).'\'';
 			echo '<script>$(() => new controller('.
 				json_encode($this->config, JSON_UNESCAPED_UNICODE).', '.
-				json_encode($this->request, JSON_UNESCAPED_UNICODE).
+				json_encode($this->request, JSON_UNESCAPED_UNICODE).', '.
+				json_encode($this->target, JSON_UNESCAPED_UNICODE).
 			').controller(\''.$this->request['target'].'\').'.$this->request['action'].'('.$params_str.'));</script>'."\n";
 		} else {
 			ob_end_clean();
@@ -94,7 +99,18 @@ class super_view {
 		]);
 		if ($super_controller_path !== null) {
 			$this->loaded_controller_class_names[] = pathinfo($super_controller_path, PATHINFO_FILENAME);
-			echo '<script src="'.$this->href($super_controller_path, true).'"></script>'."\n";
+			echo '<script src="'.$this->href($super_controller_path, [], true).'"></script>'."\n";
+		} elseif (isset($this->target['fallback'])) {
+			$super_controller_path = fallback::get_fallback_path([
+				$this->config['packages'],
+				['controllers'],
+				['super_'.$this->target['fallback'].'_controller.js'],
+			]);
+			if ($super_controller_path !== null) {
+				$this->loaded_controller_class_names[] = pathinfo($super_controller_path, PATHINFO_FILENAME);
+				echo '<script src="'.$this->href($super_controller_path, [], true).'"></script>'."\n";
+				echo '<script>const super_'.$controller_name.'_controller = super_'.$this->target['fallback'].'_controller;</script>'."\n";
+			}
 		}
 	}
 
@@ -108,7 +124,20 @@ class super_view {
 		if ($controller_path !== null) {
 			$this->loaded_controller_class_names[] = pathinfo($controller_path, PATHINFO_FILENAME);
 			echo '<script src="'.$this->href($controller_path, [], true).'"></script>'."\n";
-		} elseif (in_array('super_'.$controller_name.'_controller', $this->loaded_controller_class_names)) {
+		} elseif (isset($this->target['fallback'])) {
+			$controller_path = fallback::get_fallback_path([
+				$this->config['packages'],
+				['controllers'],
+				[$this->target['fallback'].'_controller.js'],
+			]);
+			if ($controller_path !== null) {
+				$this->loaded_controller_class_names[] = pathinfo($controller_path, PATHINFO_FILENAME);
+				echo '<script src="'.$this->href($controller_path, [], true).'"></script>'."\n";
+				echo '<script>const '.$controller_name.'_controller = '.$this->target['fallback'].'_controller;</script>'."\n";
+			} elseif (in_array('super_'.$controller_name.'_controller', $this->loaded_controller_class_names) || isset($this->target['fallback']) && in_array('super_'.$this->target['fallback'].'_controller', $this->loaded_controller_class_names)) {
+				echo '<script>const '.$controller_name.'_controller = super_'.$controller_name.'_controller;</script>'."\n";
+			}
+		} elseif (in_array('super_'.$controller_name.'_controller', $this->loaded_controller_class_names) || isset($this->target['fallback']) && in_array('super_'.$this->target['fallback'].'_controller', $this->loaded_controller_class_names)) {
 			echo '<script>const '.$controller_name.'_controller = super_'.$controller_name.'_controller;</script>'."\n";
 		}
 	}
@@ -125,7 +154,7 @@ class super_view {
 			[$referable_file],
 		]);
 		if ($referable_path !== null) {
-			$this->href($referable_path);
+			$this->href($referable_path, ['language' => $this->config['request']['languages'][0], 'actor' => $this->config['request']['actors'][0]]);
 		} else {
 			exception_handler::throw_exception('referable_not_found', ['config' => $this->config, 'request' => $this->request, 'referable_file' => $referable_file, 'replace_segments' => $replace_segments]);		}
 	}

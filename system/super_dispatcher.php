@@ -11,6 +11,7 @@ class super_dispatcher {
 		$this->load_super_exception_handler_class($config);
 		$this->load_exception_handler_class($config);
 		$request = $this->get_request($config);
+		$target = $this->load_target($config, $request['target']);
 		if (isset($config['session']['use']) && $config['session']['use']) {
 			if (isset($config['session']['database']) && $config['session']['database']) {
 				$this->load_super_session_handler_class($config);
@@ -28,9 +29,9 @@ class super_dispatcher {
 			session_gc();
 		}
 		if ($request['type'] === 'page') {
-			$this->exec_page_request($config, $request);
+			$this->exec_page_request($config, $request, $target);
 		} else {
-			$this->exec_api_request($config, $request);
+			$this->exec_api_request($config, $request, $target);
 		}
 	}
 
@@ -92,6 +93,7 @@ class super_dispatcher {
 		$request = [];
 		$timeofday = gettimeofday();
 		$request['microtime'] = isset($GLOBALS['test_params']['microtime']) ? $GLOBALS['test_params']['microtime'] : $timeofday['sec'] * 1000000 + $timeofday['usec'];
+		$request['token'] = isset($GLOBALS['test_params']['token']) ? $GLOBALS['test_params']['token'] : bin2hex(random_bytes(16));
 		$segments = $_SERVER['PATH_INFO'] === '/' ? [] : explode('/', trim($_SERVER['PATH_INFO'], '/'));
 		$request['base_url'] = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']);
 		$request['type'] = isset($segments[0]) && $segments[0] === 'api' ? array_shift($segments) : 'page';
@@ -117,11 +119,25 @@ class super_dispatcher {
 		return $request;
 	}
 
-	protected function exec_page_request($config, $request)
+	protected function load_target($config, $target_name)
+	{
+		$target_path = fallback::get_fallback_path([
+			$config['packages'],
+			['targets'],
+			[$target_name.'.php'],
+		]);
+		if ($target_path !== null) {
+			return require_once './'.$target_path;
+		} else {
+			return [];
+		}
+	}
+
+	protected function exec_page_request($config, $request, $target)
 	{
 		$this->load_super_view_class($config);
 		$this->load_view_class($config);
-		(new view($config, $request))->initialize_exception_handler()->validate_request()->load_view('template');
+		(new view($config, $request, $target))->initialize_exception_handler()->validate_request()->load_view('template');
 	}
 
 	protected function load_super_view_class($config)
@@ -148,13 +164,13 @@ class super_dispatcher {
 		}
 	}
 
-	protected function exec_api_request($config, $request)
+	protected function exec_api_request($config, $request, $target)
 	{
 		$this->load_super_model_class($config);
 		$this->load_model_class($config);
-		$this->load_super_target_model_class($config, $request['target']);
-		$this->load_target_model_class($config, $request['target']);
-		$result = call_user_func_array([(new model($config, $request))->initialize_exception_handler()->validate_request()->model($request['target']), $request['action']], $request['params']);
+		$this->load_super_target_model_class($config, $target, $request['target']);
+		$this->load_target_model_class($config, $target, $request['target']);
+		$result = call_user_func_array([(new model($config, $request, $target))->initialize_exception_handler()->validate_request()->model($request['target']), $request['action']], $request['params']);
 		echo json_encode($result, JSON_UNESCAPED_UNICODE);
 	}
 
@@ -182,7 +198,7 @@ class super_dispatcher {
 		}
 	}
 
-	protected function load_super_target_model_class($config, $model_name)
+	protected function load_super_target_model_class($config, $target, $model_name)
 	{
 		$super_model_path = fallback::get_fallback_path([
 			$config['packages'],
@@ -191,10 +207,20 @@ class super_dispatcher {
 		]);
 		if ($super_model_path !== null) {
 			require_once './'.$super_model_path;
+		} elseif (isset($target['fallback'])) {
+			$super_model_path = fallback::get_fallback_path([
+				$config['packages'],
+				['models'],
+				['super_'.$target['fallback'].'_model.php'],
+			]);
+			if ($super_model_path !== null) {
+				require_once './'.$super_model_path;
+				class_alias('super_'.$target['fallback'].'_model', 'super_'.$model_name.'_model');
+			}
 		}
 	}
 
-	protected function load_target_model_class($config, $model_name)
+	protected function load_target_model_class($config, $target, $model_name)
 	{
 		$model_path = fallback::get_fallback_path([
 			$config['packages'],
@@ -203,16 +229,34 @@ class super_dispatcher {
 		]);
 		if ($model_path !== null) {
 			require_once './'.$model_path;
+		} elseif (isset($target['fallback'])) {
+			$model_path = fallback::get_fallback_path([
+				$config['packages'],
+				['models'],
+				[$target['fallback'].'_model.php'],
+			]);
+			if ($model_path !== null) {
+				require_once './'.$model_path;
+				class_alias($target['fallback'].'_model', $model_name.'_model');
+			} elseif (class_exists('super_'.$model_name.'_model')) {
+				class_alias('super_'.$model_name.'_model', $model_name.'_model');
+			} else {
+				(new model($config, [], []))->initialize_exception_handler();
+				exception_handler::throw_exception('model_not_found', ['config' => $config, 'model_name' => $model_name]);
+			}
 		} elseif (class_exists('super_'.$model_name.'_model')) {
 			class_alias('super_'.$model_name.'_model', $model_name.'_model');
 		} else {
-			(new model($config, []))->initialize_exception_handler();
+			(new model($config, [], []))->initialize_exception_handler();
 			exception_handler::throw_exception('model_not_found', ['config' => $config, 'model_name' => $model_name]);
 		}
 	}
 
 	public static function validate_request($config, $request)
 	{
+		if ($request['actor'] !== $config['request']['actors'][0] && !isset($_SESSION['auth'][$request['actor']])) {
+			exception_handler::throw_exception('authentication_required', ['config' => $config, 'request' => $request], 403, 0);
+		}
 		if (!isset($config['request']['param_patterns'][$request['type']][$request['actor']][$request['target']][$request['action']])) {
 			exception_handler::throw_exception('invalid_request', ['config' => $config, 'request' => $request], 404, 0);
 		}

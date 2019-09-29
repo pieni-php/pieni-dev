@@ -1,15 +1,16 @@
 class super_controller {
-	constructor(config, request)
+	constructor(config, request, target)
 	{
 		this.config = config;
 		this.request = request;
+		this.target = target;
 	}
 
 	controller(controller_name)
 	{
-		return new (function getClass(classname){
+		return new (function(classname){
 			return Function('return (' + classname + ')')();
-		}(controller_name + '_controller'))(this.config, this.request);
+		}(controller_name + '_controller'))(this.config, this.request, this.target);
 	}
 
 	href(path, replace_segments = {})
@@ -33,5 +34,15 @@ class super_controller {
 			$('#exception_modal .debug .debug_message').html(data.debug.debug_message);
 		}
 		$('#exception_modal').modal('show');
+	}
+
+	show_alert_modal(message, callback)
+	{
+		$('#alert_modal .message').html(message);
+		$('#alert_modal').off('hidden.bs.modal');
+		if (typeof callback === 'function') {
+			$('#alert_modal').on('hidden.bs.modal', callback);
+		}
+		$('#alert_modal').modal('show');
 	}
 }

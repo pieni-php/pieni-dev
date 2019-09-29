@@ -3,6 +3,6 @@ equals_to(
 	'request /api',
 	exec_request('/api'),
 	[
-		'1 + 1' => 2,
+		'Answer to the Ultimate Question of Life, The Universe, and Everything' => 42,
 	]
 );

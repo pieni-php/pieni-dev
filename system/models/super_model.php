@@ -1,11 +1,15 @@
 <?php
 class super_model {
+	protected $config;
+	protected $request;
+	protected $target;
 	protected static $dbh;
 
-	public function __construct($config, $request)
+	public function __construct($config, $request, $target)
 	{
 		$this->config = $config;
 		$this->request = $request;
+		$this->target = $target;
 	}
 
 	public function initialize_exception_handler()
@@ -25,7 +29,7 @@ class super_model {
 	public function model($model_name)
 	{
 		$model_class_name = $model_name.'_model';
-		return new $model_class_name($this->config, $this->request);
+		return new $model_class_name($this->config, $this->request, $this->target);
 	}
 
 	protected function rows($statement, $bind_assoc = [])
@@ -68,7 +72,9 @@ class super_model {
 
 	protected function send_mail($mail_name, $data = [])
 	{
-		$mail = $this->load_mail($mail_name, $data);
+		ob_start();
+		$this->load_mail($mail_name, $data);
+		$mail = ob_get_clean();
 		[$subject, $message] = explode("\n", $mail, 2);
 		$params = [
 			'to' => $data['to'],
@@ -93,15 +99,44 @@ class super_model {
 			['mails'],
 			[$segments['language'], ''],
 			[$segments['actor'], ''],
-			[$segments['target'], ''],
+			isset($this->target['fallback']) ? [$segments['target'], $this->target['fallback'], ''] : [$segments['target'], ''],
 			[$mail_name.'.php'],
 		]);
 		if ($mail_path !== null) {
-			ob_start();
 			require './'.$mail_path;
-			return ob_get_clean();
 		} else {
 			exception_handler::throw_exception('mail_not_found', ['config' => $this->config, 'request' => $this->request, 'mail_name' => $mail_name, 'replace_segments' => $replace_segments], 500, 2);
 		}
+	}
+
+	protected function href($path, $replace_segments = [])
+	{
+		$href = $this->request['base_url'];
+		$segments = array_merge($this->request, $replace_segments);
+		if ($segments['language'] !== $this->config['request']['languages'][0]) $href .= '/'.$segments['language'];
+		if ($segments['actor'] !== $this->config['request']['actors'][0]) $href .= '/'.$segments['actor'];
+		$href .= '/'.$path;
+		echo $href;
+	}
+
+	protected function get_set_clause($columns)
+	{
+		$array = [];
+		foreach ($columns as $key => $column) {
+			$array[] = '`'.$key.'` = :'.$key;
+		}
+		return implode(' AND ', $array);
+	}
+
+	protected function get_bind_assocs($columns, $data)
+	{
+		$bind_assocs = [];
+		foreach ($columns as $key => $column) {
+			$bind_assocs[$key] = [
+				'value' => $data[$key],
+				'data_type' => $column['data_type'],
+			];
+		}
+		return $bind_assocs;
 	}
 }

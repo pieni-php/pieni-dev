@@ -19,3 +19,4 @@ script:
   - php ./system/scripts/test.php system/examples/mvc
   - php ./system/scripts/test.php system/examples/session
   - php ./system/scripts/test.php system/examples/mail
+  - php ./system/scripts/test.php system/examples/auth

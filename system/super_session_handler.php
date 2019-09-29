@@ -70,10 +70,7 @@ class super_session_handler implements SessionHandlerInterface {
 		$sth->bindValue(':id', $id, PDO::PARAM_STR);
 		$sth->execute();
 		foreach ($sth->fetchAll(PDO::FETCH_ASSOC) as $row) {
-			$data['auth'][$row['auth_session_actor']] = [
-				'id' => $row['auth_session_id'],
-				'data' => json_decode($row['auth_session_data'], true),
-			];
+			$data['auth'][$row['auth_session_actor']] = array_merge(['id' => $row['auth_session_id']], json_decode($row['auth_session_data'], true));
 		}
 		return serialize($data);
 	}
@@ -98,11 +95,13 @@ class super_session_handler implements SessionHandlerInterface {
 		$sth->execute();
 		if (isset($auth_values)) {
 			foreach ($auth_values as $auth_actor => $auth_value) {
+				$auth_id = $auth_value['id'];
+				unset($auth_value['id']);
 				$sth = $this->dbh->prepare('INSERT INTO `auth_session` SET `session_id` = :id, `auth_session_actor` = :auth_actor, `auth_session_id` = :auth_id, `auth_session_data` = :auth_data');
 				$sth->bindValue(':id', $id, PDO::PARAM_STR);
 				$sth->bindValue(':auth_actor', $auth_actor, PDO::PARAM_STR);
-				$sth->bindValue(':auth_id', $auth_value['id'], PDO::PARAM_STR);
-				$sth->bindValue(':auth_data', json_encode($auth_value['data'], JSON_UNESCAPED_UNICODE), PDO::PARAM_STR);
+				$sth->bindValue(':auth_id', $auth_id, PDO::PARAM_STR);
+				$sth->bindValue(':auth_data', json_encode($auth_value, JSON_UNESCAPED_UNICODE), PDO::PARAM_STR);
 				$sth->execute();
 			}
 		}

@@ -53,6 +53,11 @@ function not_contains($label, $actual_values, $expected_values)
 	$actual_values !== array_replace_recursive($actual_values, $expected_values) ? succeeded() : failed();
 }
 
+function password_hash_matches($label, $actual_values, $expected_values)
+{
+	password_verify($expected_values , $actual_values) ? succeeded() : failed();
+}
+
 $config = require_once './'.$argv[1].'/config.php';
 if (isset($config['pdo'])) {
 	$dsn = [];
