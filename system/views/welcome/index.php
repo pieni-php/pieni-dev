@@ -9,5 +9,6 @@
     <li><code>./system/examples/session/</code></li>
     <li><code>./system/examples/mail/</code></li>
     <li><code>./system/examples/auth/</code></li>
+    <li><code>./system/examples/crud/</code></li>
   </ol>
 </div>
