@@ -105,7 +105,7 @@ class super_model {
 		if ($mail_path !== null) {
 			require './'.$mail_path;
 		} else {
-			exception_handler::throw_exception('mail_not_found', ['config' => $this->config, 'request' => $this->request, 'mail_name' => $mail_name, 'replace_segments' => $replace_segments], 500, 2);
+			exception_handler::throw_exception('mail_not_found', ['config' => $this->config, 'request' => $this->request, 'target' => $this->target, 'mail_name' => $mail_name, 'replace_segments' => $replace_segments], 500, 2);
 		}
 	}
 
