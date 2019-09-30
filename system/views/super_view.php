@@ -42,7 +42,7 @@ class super_view {
 		if ($view_path !== null) {
 			return require './'.$view_path;
 		} else {
-			exception_handler::throw_exception('view_not_found', ['config' => $this->config, 'request' => $this->request, 'view_name' => $view_name, 'replace_segments' => $replace_segments]);
+			exception_handler::throw_exception('view_not_found', ['config' => $this->config, 'request' => $this->request, 'target' => $this->target, 'view_name' => $view_name, 'replace_segments' => $replace_segments]);
 		}
 	}
 

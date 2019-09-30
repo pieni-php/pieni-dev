@@ -7,6 +7,7 @@ $all_mail_pathes = fallback::get_all_fallback_pathes([
 	[$segments['language'], ''],
 	[$segments['actor'], ''],
 	[$segments['target'], ''],
+	isset($data['target']['fallback']) ? [$segments['target'], $data['target']['fallback'], ''] : [$segments['target'], ''],
 	[$data['mail_name'].'.php'],
 ]);
 ?>

@@ -242,13 +242,13 @@ class super_dispatcher {
 				class_alias('super_'.$model_name.'_model', $model_name.'_model');
 			} else {
 				(new model($config, [], []))->initialize_exception_handler();
-				exception_handler::throw_exception('model_not_found', ['config' => $config, 'model_name' => $model_name]);
+				exception_handler::throw_exception('model_not_found', ['config' => $config, 'target' => $target, 'model_name' => $model_name]);
 			}
 		} elseif (class_exists('super_'.$model_name.'_model')) {
 			class_alias('super_'.$model_name.'_model', $model_name.'_model');
 		} else {
 			(new model($config, [], []))->initialize_exception_handler();
-			exception_handler::throw_exception('model_not_found', ['config' => $config, 'model_name' => $model_name]);
+			exception_handler::throw_exception('model_not_found', ['config' => $config, 'target' => $target, 'model_name' => $model_name]);
 		}
 	}
 
