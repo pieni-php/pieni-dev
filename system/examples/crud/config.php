@@ -14,6 +14,9 @@ return [
 					'category' => [
 						'index' => [],
 					],
+					'item' => [
+						'index' => [],
+					],
 				],
 			],
 			'api' => [
@@ -22,6 +25,9 @@ return [
 						'index' => [],
 					],
 					'category' => [
+						'index' => [],
+					],
+					'item' => [
 						'index' => [],
 					],
 				],
