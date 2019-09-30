@@ -13,22 +13,23 @@ return [
 					],
 					'category' => [
 						'index' => [],
+						'view' => ['/^[1-9]\d*$/'],
 					],
 					'item' => [
 						'index' => [],
+						'view' => ['/^[1-9]\d*$/'],
 					],
 				],
 			],
 			'api' => [
 				'g' => [
-					'welcome' => [
-						'index' => [],
-					],
 					'category' => [
 						'index' => [],
+						'view' => ['/^[1-9]\d*$/'],
 					],
 					'item' => [
 						'index' => [],
+						'view' => ['/^[1-9]\d*$/'],
 					],
 				],
 			],
