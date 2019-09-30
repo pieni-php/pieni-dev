@@ -139,4 +139,18 @@ class super_model {
 		}
 		return $bind_assocs;
 	}
+
+	protected function load_target($target_name)
+	{
+		$target_path = fallback::get_fallback_path([
+			$this->config['packages'],
+			['targets'],
+			[$target_name.'.php'],
+		]);
+		if ($target_path !== null) {
+			return require_once './'.$target_path;
+		} else {
+			exception_handler::throw_exception('target_not_found');
+		}
+	}
 }
