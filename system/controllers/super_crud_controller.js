@@ -24,4 +24,17 @@ class super_crud_controller extends controller {
 			},
 		});
 	}
+
+	child_of(parent, parent_id)
+	{
+		$.ajax({
+			url: this.href('api/' + this.target.target + '/child_of/' + parent + '/' + parent_id),
+			success: (result) => {
+				$('#result').text(JSON.stringify(JSON.parse(result), null, 2));
+			},
+			error: (jqXHR) => {
+				this.show_exception_modal(JSON.parse(jqXHR.responseText));
+			},
+		});
+	}
 }

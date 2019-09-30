@@ -18,6 +18,7 @@ return [
 					'item' => [
 						'index' => [],
 						'view' => ['/^[1-9]\d*$/'],
+						'child_of' => ['/category$/', '/^[1-9]\d*$/'],
 					],
 				],
 			],
@@ -30,6 +31,7 @@ return [
 					'item' => [
 						'index' => [],
 						'view' => ['/^[1-9]\d*$/'],
+						'child_of' => ['/category$/', '/^[1-9]\d*$/'],
 					],
 				],
 			],

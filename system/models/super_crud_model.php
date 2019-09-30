@@ -14,4 +14,9 @@ class super_crud_model extends model {
 			],
 		]);
 	}
+
+	public function child_of($parent, $parent_id)
+	{
+		return $this->rows('SELECT * FROM `'.$this->target['target'].'`');
+	}
 }
