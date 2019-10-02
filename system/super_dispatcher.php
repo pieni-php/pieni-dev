@@ -119,7 +119,7 @@ class super_dispatcher {
 		return $request;
 	}
 
-	protected function load_target($config, $target_name)
+	protected function load_target($config, $target_name, $as_child = false)
 	{
 		$target_path = fallback::get_fallback_path([
 			$config['packages'],
@@ -128,10 +128,10 @@ class super_dispatcher {
 		]);
 		if ($target_path !== null) {
 			$target = require_once './'.$target_path;
-			if (isset($target['child_names'])) {
+			if (!$as_child && isset($target['child_names'])) {
 				$target['children'] = [];
 				foreach ($target['child_names'] as $child_name) {
-					$target['children'][$child_name] = $this->load_target($config, $child_name);
+					$target['children'][$child_name] = $this->load_target($config, $child_name, true);
 				}
 			}
 			return $target;
