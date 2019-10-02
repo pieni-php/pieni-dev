@@ -23,13 +23,13 @@ class super_crud_controller extends controller {
 				this.show_exception_modal(JSON.parse(jqXHR.responseText));
 			},
 		});
-		if (this.target.children !== undefined) {
-			this.target.children.forEach(function(child){
+		if (this.target.child_names !== undefined) {
+			this.target.child_names.forEach(function(child_name){
 
 				$.ajax({
-					url: this.href('api/' + child + '/child_of/' + this.target.target + '/' + id),
+					url: this.href('api/' + child_name + '/child_of/' + this.target.target + '/' + id),
 					success: (result) => {
-						$('#' + child).text(JSON.stringify(JSON.parse(result), null, 2));
+						$('#' + child_name).text(JSON.stringify(JSON.parse(result), null, 2));
 					},
 					error: (jqXHR) => {
 						this.show_exception_modal(JSON.parse(jqXHR.responseText));

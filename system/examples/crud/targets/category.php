@@ -4,5 +4,5 @@ return [
 	'target' => 'category',
 	'table' => 'category',
 	'id_expr' => '`category_id`',
-	'children' => ['item'],
+	'child_names' => ['item'],
 ];
