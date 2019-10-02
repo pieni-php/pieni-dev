@@ -119,6 +119,15 @@ class super_model {
 		echo $href;
 	}
 
+	protected function get_select_clause()
+	{
+		$column_arr = [];
+		foreach (array_merge(['id' => ['expr' => $this->target['id_expr']], 'name' => ['expr' => $this->target['name_expr']]], $this->target['columns']) as $column_name => $column) {
+			$column_arr[] = $column['expr'].' AS `'.$column_name.'`';
+		}
+		return implode(', ', $column_arr);
+	}
+
 	protected function get_set_clause($columns)
 	{
 		$array = [];

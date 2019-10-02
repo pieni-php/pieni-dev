@@ -2,7 +2,10 @@
 class super_crud_model extends model {
 	public function index()
 	{
-		return $this->rows('SELECT * FROM `'.$this->target['target'].'`');
+		return $this->rows(
+			'SELECT '.$this->get_select_clause()."\n".
+			'FROM `'.$this->target['target'].'`'
+		);
 	}
 
 	public function view($id)

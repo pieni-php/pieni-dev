@@ -4,5 +4,12 @@ return [
 	'target' => 'category',
 	'table' => 'category',
 	'id_expr' => '`category_id`',
+	'name_expr' => '`category_name`',
 	'child_names' => ['item'],
+	'columns' => [
+		'id_and_name' => [
+			'expr' => 'CONCAT_WS("-", `category_id`, `category_name`)',
+			'data_type' => PDO::PARAM_STR,
+		],
+	],
 ];
