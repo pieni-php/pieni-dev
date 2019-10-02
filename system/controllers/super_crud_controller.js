@@ -19,7 +19,7 @@ class super_crud_controller extends controller {
 			success: (data) => {
 				const result = JSON.parse(data);
 				$('[name="name"]').text(result.name);
-				$('#result').text(JSON.stringify(JSON.parse(result), null, 2));
+				$('#result').text(JSON.stringify(JSON.parse(data), null, 2));
 			},
 			error: (jqXHR) => {
 				this.show_exception_modal(JSON.parse(jqXHR.responseText));
