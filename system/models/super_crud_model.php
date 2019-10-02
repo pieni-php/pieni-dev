@@ -13,7 +13,9 @@ class super_crud_model extends model {
 	{
 		return $this->row(
 			'SELECT '.$this->get_select_clause()."\n".
-			'FROM `'.$this->target['target'].'` WHERE '.$this->target['id_expr'].' = :id',
+			'FROM `'.$this->target['target'].'`'."\n".
+			$this->get_join_tables().
+			'WHERE '.$this->target['id_expr'].' = :id',
 			[
 				'id' => [
 					'value' => $id,
@@ -28,7 +30,9 @@ class super_crud_model extends model {
 		$parent_target = $this->load_target($parent);
 		return $this->rows(
 			'SELECT '.$this->get_select_clause()."\n".
-			'FROM `'.$this->target['target'].'` WHERE '.$parent_target['id_expr'].' = :parent_id',
+			'FROM `'.$this->target['target'].'`'."\n".
+			$this->get_join_tables().
+			'WHERE '.$parent_target['id_expr'].' = :parent_id',
 			[
 				'parent_id' => [
 					'value' => $parent_id,

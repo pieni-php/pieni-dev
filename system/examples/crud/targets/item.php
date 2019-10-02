@@ -9,9 +9,6 @@ return [
 		'category' => [],
 	],
 	'columns' => [
-		'category_id' => [
-			'data_type' => PDO::PARAM_INT,
-		],
 		'category_name' => [
 			'data_type' => PDO::PARAM_STR,
 		],
