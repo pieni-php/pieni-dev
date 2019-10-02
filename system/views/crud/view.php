@@ -1,5 +1,13 @@
 <div class="container">
   <h1 name="name"></h1>
+  <table class="table">
+<?php foreach ($this->target['columns'] as $column_name => $column): ?>
+    <tr>
+      <th><?php $this->h($column_name); ?></th>
+      <td></td>
+    </tr>
+<?php endforeach; ?>
+  </table>
   <pre id="result">
   </pre>
   <hr>
