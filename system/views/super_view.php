@@ -28,8 +28,11 @@ class super_view {
 		return $this;
 	}
 
-	public function load_view($view_name, $data = [], $replace_segments = [])
+	public function load_view($view_name, $data = [], $replace_segments = [], $target = [])
 	{
+		if (isset($this->target) && $target === []) {
+			$target = $this->target;
+		}
 		$segments = array_merge($this->request, $replace_segments);
 		$view_path = fallback::get_fallback_path([
 			$this->config['packages'],

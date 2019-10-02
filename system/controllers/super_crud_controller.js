@@ -19,6 +19,9 @@ class super_crud_controller extends controller {
 			success: (data) => {
 				const result = JSON.parse(data);
 				$('[name="name"]').text(result.name);
+				Object.keys(this.target.columns).forEach(function(column_name){
+					$('[name="' + column_name + '"]').text(result[column_name]);
+				});
 				$('#result').text(JSON.stringify(JSON.parse(data), null, 2));
 			},
 			error: (jqXHR) => {
