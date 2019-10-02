@@ -16,7 +16,9 @@ class super_crud_controller extends controller {
 	{
 		$.ajax({
 			url: this.href('api/' + this.target.target + '/view/' + id),
-			success: (result) => {
+			success: (data) => {
+				const result = JSON.parse(data);
+				$('[name="name"]').text(result.name);
 				$('#result').text(JSON.stringify(JSON.parse(result), null, 2));
 			},
 			error: (jqXHR) => {
