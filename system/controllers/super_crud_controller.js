@@ -40,8 +40,16 @@ class super_crud_controller extends controller {
 
 				$.ajax({
 					url: this.href('api/' + child_name + '/child_of/' + this.target.target + '/' + id),
-					success: (result) => {
-//						$('#' + child_name).text(JSON.stringify(JSON.parse(result), null, 2));
+					success: (data) => {
+						const result = JSON.parse(data);
+						const row_template = $('#' + child_name + ' .row_template');
+						result.forEach(function(row){
+							const row_element = row_template.clone(true).removeClass('d-none');
+							['name'].concat(Object.keys(this.target.children[child_name].columns)).forEach(function(column_name){
+								row_element.find('[name="' + column_name + '"]').text(row[column_name]);
+							});
+							$('#' + child_name + ' table').append(row_element);
+						}, this);
 					},
 					error: (jqXHR) => {
 						this.show_exception_modal(JSON.parse(jqXHR.responseText));

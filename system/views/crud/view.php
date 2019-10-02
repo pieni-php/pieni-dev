@@ -13,27 +13,15 @@
   <hr>
 <?php if (isset($target['child_names'])): ?>
   <ul class="nav nav-tabs">
+<?php foreach ($target['child_names'] as $i => $child_name): ?>
     <li class="nav-item">
-    <a class="nav-link active" data-toggle="tab" href="#home">Home</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" data-toggle="tab" href="#profile">Profile</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" data-toggle="tab" href="#contact">Contact</a>
-    </li>
-<?php foreach ($target['child_names'] as $child_name): ?>
-    <li class="nav-item">
-      <a class="nav-link" data-toggle="tab" href="#<?php echo $child_name; ?>"><?php echo $child_name; ?></a>
+      <a class="nav-link<?php if ($i === 0): ?> active<?php endif; ?>" data-toggle="tab" href="#<?php echo $child_name; ?>"><?php echo $child_name; ?></a>
     </li>
 <?php endforeach; ?>
   </ul>
   <div class="tab-content">
-    <div class="tab-pane fade show active" id="home">...1</div>
-    <div class="tab-pane fade" id="profile">...2</div>
-    <div class="tab-pane fade" id="contact">...3</div>
 <?php foreach ($target['children'] as $child_name => $child): ?>
-    <div class="tab-pane fade" id="<?php echo $child_name; ?>">
+    <div class="tab-pane fade<?php if ($i === 0): ?> show active<?php endif; ?>" id="<?php echo $child_name; ?>">
 <?php $this->load_view('child_of', [], ['target' => $child_name], $child); ?>
     </div>
 <?php endforeach; ?>

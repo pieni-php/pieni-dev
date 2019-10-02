@@ -4,7 +4,7 @@
       <th><?php $this->h($column_name); ?></th>
 <?php endforeach; ?>
     </tr>
-    <tr id="row_template" class="d-none">
+    <tr class="row_template d-none">
 <?php foreach (array_merge(['name' => []], $target['columns']) as $column_name => $column): ?>
       <td name="<?php $this->h($column_name); ?>"></td>
 <?php endforeach; ?>
