@@ -12,15 +12,32 @@
   </pre>
   <hr>
 <?php if (isset($target['child_names'])): ?>
-  <div id="children">
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+    <a class="nav-link active" data-toggle="tab" href="#home">Home</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#profile">Profile</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#contact">Contact</a>
+    </li>
 <?php foreach ($target['child_names'] as $child_name): ?>
-    <pre id="<?php echo $child_name; ?>">
-    </pre>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#<?php echo $child_name; ?>"><?php echo $child_name; ?></a>
+    </li>
+<?php endforeach; ?>
+  </ul>
+  <div class="tab-content">
+    <div class="tab-pane fade show active" id="home">...1</div>
+    <div class="tab-pane fade" id="profile">...2</div>
+    <div class="tab-pane fade" id="contact">...3</div>
+<?php foreach ($target['children'] as $child_name => $child): ?>
+    <div class="tab-pane fade" id="<?php echo $child_name; ?>">
+<?php $this->load_view('child_of', [], ['target' => $child_name], $child); ?>
+    </div>
 <?php endforeach; ?>
   </div>
 <?php endif; ?>
-<hr>
-<pre>
-<?php print_r($target); ?>
-</pre>
+  <hr>
 </div>
