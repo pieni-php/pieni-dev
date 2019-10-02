@@ -1,6 +1,6 @@
 <div class="container">
   <h1 name="name"></h1>
-  <table class="table" style="width:0; white-space:nowrap;">
+  <table class="table" id="<?php echo $target['target']; ?>" style="width:0; white-space:nowrap;">
 <?php foreach ($target['columns'] as $column_name => $column): ?>
     <tr>
       <th><?php $this->h($column_name); ?></th>
