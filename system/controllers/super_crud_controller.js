@@ -27,7 +27,7 @@ class super_crud_controller extends controller {
 			url: this.href('api/' + this.target.target + '/view/' + id),
 			success: (data) => {
 				const result = JSON.parse(data);
-				$('#' + this.target.target + ' [name="name"]').text(result.name);
+				$('#' + this.target.target + '_name').text(result.name);
 				Object.keys(this.target.columns).forEach(function(column_name){
 					$('[name="' + column_name + '"]').text(result[column_name]);
 				});

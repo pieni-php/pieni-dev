@@ -1,5 +1,5 @@
 <div class="container">
-  <h1 name="name"></h1>
+  <h1 id="<?php echo $target['target']; ?>_name"></h1>
   <table class="table" id="<?php echo $target['target']; ?>" style="width:0; white-space:nowrap;">
 <?php foreach ($target['columns'] as $column_name => $column): ?>
     <tr>
