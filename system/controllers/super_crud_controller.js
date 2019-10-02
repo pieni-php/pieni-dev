@@ -3,8 +3,16 @@ class super_crud_controller extends controller {
 	{
 		$.ajax({
 			url: this.href('api/' + this.target.target),
-			success: (result) => {
-				$('#result').text(JSON.stringify(JSON.parse(result), null, 2));
+			success: (data) => {
+				const result = JSON.parse(data);
+				const row_template = $('#row_template');
+				result.forEach(function(row){
+					const row_element = row_template.clone(true).removeClass('d-none');
+					['name'].concat(Object.keys(this.target.columns)).forEach(function(column_name){
+						row_element.find('[name="' + column_name + '"]').text(row[column_name]);
+					});
+					$('table').append(row_element);
+				}, this);
 			},
 			error: (jqXHR) => {
 				this.show_exception_modal(JSON.parse(jqXHR.responseText));
@@ -22,7 +30,6 @@ class super_crud_controller extends controller {
 				Object.keys(this.target.columns).forEach(function(column_name){
 					$('[name="' + column_name + '"]').text(result[column_name]);
 				});
-				$('#result').text(JSON.stringify(JSON.parse(data), null, 2));
 			},
 			error: (jqXHR) => {
 				this.show_exception_modal(JSON.parse(jqXHR.responseText));

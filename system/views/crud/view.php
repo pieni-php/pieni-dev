@@ -1,9 +1,9 @@
 <div class="container">
   <h1 name="name"></h1>
-  <table class="table">
+  <table class="table" style="width:0; white-space:nowrap;">
 <?php foreach ($target['columns'] as $column_name => $column): ?>
     <tr>
-      <th style="width:0; white-space:nowrap;"><?php $this->h($column_name); ?> asdf</th>
+      <th><?php $this->h($column_name); ?></th>
       <td name="<?php $this->h($column_name); ?>"></td>
     </tr>
 <?php endforeach; ?>
