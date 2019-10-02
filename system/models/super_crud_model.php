@@ -4,7 +4,8 @@ class super_crud_model extends model {
 	{
 		return $this->rows(
 			'SELECT '.$this->get_select_clause()."\n".
-			'FROM `'.$this->target['target'].'`'
+			'FROM `'.$this->target['target'].'`'.
+			$this->get_join_tables()
 		);
 	}
 

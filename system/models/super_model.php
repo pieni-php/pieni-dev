@@ -128,6 +128,16 @@ class super_model {
 		return implode(', ', $column_arr);
 	}
 
+	protected function get_join_tables()
+	{
+		if (!isset($this->target['join_tables']) || count($this->target['join_tables']) === 0) return '';
+		$join_tables = [];
+		foreach ($this->target['join_tables'] as $join_table_name => $join_table) {
+			$join_tables[] = 'NATURAL JOIN '.(isset($column['expr']) ? $column['expr'] : '`'.$join_table_name.'`').' AS `'.$join_table_name.'`';
+		}
+		return implode("\n", $join_tables);
+	}
+
 	protected function get_set_clause($columns)
 	{
 		$array = [];
