@@ -127,7 +127,14 @@ class super_dispatcher {
 			[$target_name.'.php'],
 		]);
 		if ($target_path !== null) {
-			return require_once './'.$target_path;
+			$target = require_once './'.$target_path;
+			if (isset($target['child_names'])) {
+				$target['children'] = [];
+				foreach ($target['child_names'] as $child_name) {
+					$target['children'][$child_name] = $this->load_target($config, $child_name);
+				}
+			}
+			return $target;
 		} else {
 			return [];
 		}
