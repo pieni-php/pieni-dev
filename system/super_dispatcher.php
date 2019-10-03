@@ -90,11 +90,11 @@ class super_dispatcher {
 
 	protected function get_request($config)
 	{
-		$request = [];
 		$timeofday = gettimeofday();
+		$segments = $_SERVER['PATH_INFO'] === '/' ? [] : explode('/', trim($_SERVER['PATH_INFO'], '/'));
+		$request = [];
 		$request['microtime'] = isset($GLOBALS['test_params']['microtime']) ? $GLOBALS['test_params']['microtime'] : $timeofday['sec'] * 1000000 + $timeofday['usec'];
 		$request['token'] = isset($GLOBALS['test_params']['token']) ? $GLOBALS['test_params']['token'] : bin2hex(random_bytes(16));
-		$segments = $_SERVER['PATH_INFO'] === '/' ? [] : explode('/', trim($_SERVER['PATH_INFO'], '/'));
 		$request['base_url'] = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']);
 		$request['type'] = isset($segments[0]) && $segments[0] === 'api' ? array_shift($segments) : 'page';
 		$request['language'] = isset($segments[0]) && in_array($segments[0], array_slice($config['request']['languages'], 1)) ? array_shift($segments) : $config['request']['languages'][0];
@@ -116,6 +116,7 @@ class super_dispatcher {
 				'index'
 		;
 		$request['params'] = $segments;
+		$request['_get'] = $_GET;
 		return $request;
 	}
 
