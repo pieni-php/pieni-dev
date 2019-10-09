@@ -23,19 +23,23 @@ class super_crud_controller extends controller {
 
 	view(id)
 	{
-		$.ajax({
-			url: this.href('api/' + this.target.target + '/view/' + id),
-			success: (data) => {
-				const result = JSON.parse(data);
-				$('#' + this.target.target + '_name').text(result.name);
-				Object.keys(this.target.columns).forEach(function(column_name){
-					$('[name="' + column_name + '"]').text(result[column_name]);
-				});
-			},
-			error: (jqXHR) => {
-				this.show_exception_modal(JSON.parse(jqXHR.responseText));
-			},
+		$('#' + this.target.target + '_edit').submit((e) => {
+			$.ajax({
+				url: this.href('api/' + this.target.target + '/edit/' + id),
+				type: 'post',
+				data: $(e.target).serialize(),
+				success: (result) => {
+					$(e.target).find('button').prop('disabled', true);
+					this.draw_view(id);
+					this.show_alert_modal('Please check your email.');
+				},
+				error: (jqXHR) => {
+					this.show_exception_modal(JSON.parse(jqXHR.responseText));
+				},
+			});
+			return false;
 		});
+		this.draw_view(id);
 		if (this.target.child_names !== undefined) {
 			this.target.child_names.forEach(function(child_name){
 
@@ -60,5 +64,21 @@ class super_crud_controller extends controller {
 
 			}, this);
 		}
+	}
+
+	draw_view(id) {
+		$.ajax({
+			url: this.href('api/' + this.target.target + '/view/' + id),
+			success: (data) => {
+				const result = JSON.parse(data);
+				$('#' + this.target.target + '_name').text(result.name);
+				Object.keys(this.target.columns).forEach(function(column_name){
+					$('[name="' + column_name + '"]').text(result[column_name]);
+				});
+			},
+			error: (jqXHR) => {
+				this.show_exception_modal(JSON.parse(jqXHR.responseText));
+			},
+		});
 	}
 }

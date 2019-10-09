@@ -29,3 +29,4 @@
 <?php endif; ?>
   <hr>
 </div>
+<?php $this->load_view('edit'); ?>

@@ -26,6 +26,7 @@ return [
 					'category' => [
 						'index' => [],
 						'view' => ['/^[1-9]\d*$/'],
+						'edit' => ['/^[1-9]\d*$/'],
 					],
 					'item' => [
 						'index' => [],
