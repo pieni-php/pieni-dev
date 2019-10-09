@@ -33,13 +33,13 @@ class super_view {
 		if (isset($this->target) && $target === []) {
 			$target = $this->target;
 		}
-		$segments = array_merge($this->request, $replace_segments);
+		$request = array_merge($this->request, $replace_segments);
 		$view_path = fallback::get_fallback_path([
 			$this->config['packages'],
 			['views'],
-			[$segments['language'], ''],
-			[$segments['actor'], ''],
-			isset($this->target['fallback']) ? [$segments['target'], $this->target['fallback'], ''] : [$segments['target'], ''],
+			[$request['language'], ''],
+			[$request['actor'], ''],
+			isset($this->target['fallback']) ? [$request['target'], $this->target['fallback'], ''] : [$request['target'], ''],
 			[$view_name.'.php'],
 		]);
 		if ($view_path !== null) {

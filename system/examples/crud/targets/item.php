@@ -13,4 +13,13 @@ return [
 			'data_type' => PDO::PARAM_STR,
 		],
 	],
+	'action_column_names' => [
+		'index' => [
+			'name',
+			'category_name',
+		],
+		'view' => [
+			'category_name',
+		],
+	],
 ];

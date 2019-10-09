@@ -1,7 +1,7 @@
 <div class="container">
   <h1 id="<?php echo $target['target']; ?>_name"></h1>
   <table class="table" id="<?php echo $target['target']; ?>" style="width:0; white-space:nowrap;">
-<?php foreach ($target['columns'] as $column_name => $column): ?>
+<?php foreach ($target['action_column_names'][$request['action']] as $column_name): ?>
     <tr>
       <th><?php $this->h($column_name); ?></th>
       <td name="<?php $this->h($column_name); ?>"></td>
@@ -22,7 +22,7 @@
   <div class="tab-content">
 <?php foreach ($target['children'] as $child_name => $child): ?>
     <div class="tab-pane fade<?php if ($i === 0): ?> show active<?php endif; ?>" id="<?php echo $child_name; ?>">
-<?php $this->load_view('child_of', [], ['target' => $child_name], $child); ?>
+<?php $this->load_view('child_of', [], ['target' => $child_name, 'action' => 'child_of', 'params' => [$request['target'], $request['params'][0]]], $child); ?>
     </div>
 <?php endforeach; ?>
   </div>

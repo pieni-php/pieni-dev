@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="<?php $this->h($this->request['language']); ?>">
+<html lang="<?php $this->h($request['language']); ?>">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -11,7 +11,7 @@
   </head>
   <body>
 <?php $this->load_view('navbar', $data); ?>
-<?php $this->load_view($segments['action'], $data, $segments); ?>
+<?php $this->load_view($request['action'], $data); ?>
 <?php if ($this->loaded_controller_class_names !== []) $this->load_view('exception_modal', $data); ?>
 <?php if ($this->loaded_controller_class_names !== []) $this->load_view('alert_modal', $data); ?>
   </body>
