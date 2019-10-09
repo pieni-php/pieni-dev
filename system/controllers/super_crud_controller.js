@@ -2,7 +2,7 @@ class super_crud_controller extends controller {
 	index()
 	{
 		$.ajax({
-			url: this.href('api/' + this.target.target),
+			url: this.href(this.target.target, {type: 'api'}),
 			success: (data) => {
 				const result = JSON.parse(data);
 				const row_template = $('#row_template');
@@ -25,7 +25,7 @@ class super_crud_controller extends controller {
 	{
 		$('#' + this.target.target + '_edit').submit((e) => {
 			$.ajax({
-				url: this.href('api/' + this.target.target + '/edit/' + id),
+				url: this.href(this.target.target + '/edit/' + id, {type: 'api'}),
 				type: 'post',
 				data: $(e.target).serialize(),
 				success: (result) => {
@@ -44,7 +44,7 @@ class super_crud_controller extends controller {
 			this.target.child_names.forEach(function(child_name){
 
 				$.ajax({
-					url: this.href('api/' + child_name + '/child_of/' + this.target.target + '/' + id),
+					url: this.href(child_name + '/child_of/' + this.target.target + '/' + id, {type: 'api'}),
 					success: (data) => {
 						const result = JSON.parse(data);
 						const row_template = $('#' + child_name + ' .row_template');
@@ -68,7 +68,7 @@ class super_crud_controller extends controller {
 
 	draw_view(id) {
 		$.ajax({
-			url: this.href('api/' + this.target.target + '/view/' + id),
+			url: this.href(this.target.target + '/view/' + id, {type: 'api'}),
 			success: (data) => {
 				const result = JSON.parse(data);
 				$('#' + this.target.target + '_name').text(result.name);
