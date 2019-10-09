@@ -41,4 +41,19 @@ class super_crud_model extends model {
 			]
 		);
 	}
+
+	public function edit($id)
+	{
+		return $this->pbe(
+			'UPDATE `'.$this->target['target'].'`'."\n".
+			'SET '.$this->get_set_clause($this->target['columns'])."\n".
+			'WHERE '.$this->target['id_expr'].' = :id',
+			[
+				'id' => [
+					'value' => $id,
+					'data_type' => PDO::PARAM_STR,
+				],
+			]
+		);
+	}
 }
