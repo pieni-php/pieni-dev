@@ -8,8 +8,6 @@
     </tr>
 <?php endforeach; ?>
   </table>
-  <pre id="result">
-  </pre>
   <hr>
 <?php if (isset($target['child_names'])): ?>
   <ul class="nav nav-tabs">

@@ -10,5 +10,3 @@
 <?php endforeach; ?>
     </tr>
   </table>
-  <pre id="result">
-  </pre>
