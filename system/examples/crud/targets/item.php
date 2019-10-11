@@ -9,6 +9,14 @@ return [
 		'category' => [],
 	],
 	'columns' => [
+		'id' => [
+			'expr' => '`item_id`',
+			'data_type' => PDO::PARAM_STR,
+		],
+		'name' => [
+			'expr' => '`item_name`',
+			'data_type' => PDO::PARAM_STR,
+		],
 		'category_name' => [
 			'data_type' => PDO::PARAM_STR,
 		],

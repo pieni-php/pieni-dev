@@ -122,7 +122,8 @@ class super_model {
 	protected function get_select_clause()
 	{
 		$column_arr = [];
-		foreach (array_merge(['id' => ['expr' => $this->target['id_expr']], 'name' => ['expr' => $this->target['name_expr']]], $this->target['columns']) as $column_name => $column) {
+		foreach (array_merge(['id', 'name'], $this->target['action_column_names'][$this->request['action']]) as $column_name) {
+			$column = $this->target['columns'][$column_name];
 			$column_arr[] = (isset($column['expr']) ? $column['expr'] : '`'.$column_name.'`').' AS `'.$column_name.'`';
 		}
 		return implode(', ', $column_arr);
