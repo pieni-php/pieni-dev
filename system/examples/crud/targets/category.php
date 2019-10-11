@@ -3,8 +3,6 @@ return [
 	'fallback' => 'crud',
 	'target' => 'category',
 	'table' => 'category',
-	'id_expr' => '`category_id`',
-	'name_expr' => '`category_name`',
 	'child_names' => ['item'],
 	'columns' => [
 		'id' => [
