@@ -15,7 +15,7 @@ class super_crud_model extends model {
 			'SELECT '.$this->get_select_clause()."\n".
 			'FROM `'.$this->target['target'].'`'."\n".
 			$this->get_join_tables().
-			'WHERE '.$this->target['id_expr'].' = :id',
+			'WHERE '.$this->target['columns']['id']['expr'].' = :id',
 			[
 				'id' => [
 					'value' => $id,
@@ -32,7 +32,7 @@ class super_crud_model extends model {
 			'SELECT '.$this->get_select_clause()."\n".
 			'FROM `'.$this->target['target'].'`'."\n".
 			$this->get_join_tables().
-			'WHERE '.$parent_target['id_expr'].' = :parent_id',
+			'WHERE '.$parent_target['columns']['id']['expr'].' = :parent_id',
 			[
 				'parent_id' => [
 					'value' => $parent_id,
@@ -47,7 +47,7 @@ class super_crud_model extends model {
 		return $this->pbe(
 			'UPDATE `'.$this->target['target'].'`'."\n".
 			'SET '.$this->get_set_clause($this->target['columns'])."\n".
-			'WHERE '.$this->target['id_expr'].' = :id',
+			'WHERE '.$this->target['columns']['id']['expr'].' = :id',
 			[
 'id' => [
 					'value' => $id,
