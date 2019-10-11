@@ -7,11 +7,11 @@ return [
 		'category' => [],
 	],
 	'columns' => [
-		'id' => [
+		'item_id' => [
 			'expr' => '`item_id`',
 			'data_type' => PDO::PARAM_STR,
 		],
-		'name' => [
+		'item_name' => [
 			'expr' => '`item_name`',
 			'data_type' => PDO::PARAM_STR,
 		],
@@ -22,7 +22,7 @@ return [
 	'action_column_names' => [
 		'index' => [
 			'category_name',
-			'name',
+			'item_name',
 		],
 		'view' => [
 			'category_name',
@@ -32,7 +32,7 @@ return [
 		'category' => [
 			'action_column_names' => [
 				'child_of' => [
-					'name',
+					'item_name',
 				],
 			],
 		],

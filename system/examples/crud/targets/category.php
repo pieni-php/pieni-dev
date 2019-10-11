@@ -5,11 +5,11 @@ return [
 	'table' => 'category',
 	'child_names' => ['item'],
 	'columns' => [
-		'id' => [
+		'category_id' => [
 			'expr' => '`category_id`',
 			'data_type' => PDO::PARAM_STR,
 		],
-		'name' => [
+		'category_name' => [
 			'expr' => '`category_name`',
 			'data_type' => PDO::PARAM_STR,
 		],
@@ -20,7 +20,7 @@ return [
 	],
 	'action_column_names' => [
 		'index' => [
-			'name',
+			'category_name',
 			'id_and_name',
 		],
 		'view' => [

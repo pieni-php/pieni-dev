@@ -9,8 +9,8 @@ class super_crud_controller extends controller {
 				result.forEach(function(row){
 					const row_element = row_template.clone(true).removeClass('d-none');
 					this.target.action_column_names[this.request.action].forEach(function(column_name){
-						if (column_name === 'name') {
-							row_element.find('[name="name"]').empty().append($('<a>').attr('href', this.href(this.target.target + '/view/' + row['id'])).text(row['name']));
+						if (column_name === this.target.target + '_name') {
+							row_element.find('[name="' + column_name + '"]').empty().append($('<a>').attr('href', this.href(this.target.target + '/view/' + row[this.target.target + '_id'])).text(row[column_name]));
 						} else {
 							row_element.find('[name="' + column_name + '"]').text(row[column_name]);
 						}
