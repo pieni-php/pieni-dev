@@ -22,4 +22,13 @@ return [
 			'category_name',
 		],
 	],
+	'as_child_of' => [
+		'category' => [
+			'action_column_names' => [
+				'child_of' => [
+					'name',
+				],
+			],
+		],
+	],
 ];
