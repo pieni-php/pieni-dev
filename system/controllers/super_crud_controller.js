@@ -55,8 +55,12 @@ class super_crud_controller extends controller {
 							const row_element = row_template.clone(true).removeClass('d-none');
 							row_element.find('[name="name"]').empty().append($('<a>').attr('href', this.href(child_name + '/view/' + row['id'])).text(row['name']));;
 							this.target.children[child_name].as_child_of[this.target.target].action_column_names.child_of.forEach(function(column_name){
-								row_element.find('[name="' + column_name + '"]').text(row[column_name]);
-							});
+								if (column_name === 'name') {
+									row_element.find('[name="name"]').empty().append($('<a>').attr('href', this.href(child_name + '/view/' + row['id'])).text(row['name']));
+								} else {
+									row_element.find('[name="' + column_name + '"]').text(row[column_name]);
+								}
+							}, this);
 							$('#' + child_name + ' table').append(row_element);
 						}, this);
 					},
