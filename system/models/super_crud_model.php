@@ -32,7 +32,7 @@ class super_crud_model extends model {
 			'SELECT '.$this->get_select_clause()."\n".
 			'FROM `'.$this->target['target'].'`'."\n".
 			$this->get_join_tables().
-			'WHERE '.$parent_target['columns'][$this->target['target'].'_id']['expr'].' = :parent_id',
+			'WHERE '.$parent_target['columns'][$parent_target['target'].'_id']['expr'].' = :parent_id',
 			[
 				'parent_id' => [
 					'value' => $parent_id,

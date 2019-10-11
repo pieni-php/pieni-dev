@@ -45,7 +45,6 @@ class super_crud_controller extends controller {
 		this.draw_view(id);
 		if (this.target.child_names !== undefined) {
 			this.target.child_names.forEach(function(child_name){
-
 				$.ajax({
 					url: this.href(child_name + '/child_of/' + this.target.target + '/' + id, {type: 'api'}),
 					success: (data) => {
@@ -53,10 +52,9 @@ class super_crud_controller extends controller {
 						const row_template = $('#' + child_name + ' .row_template');
 						result.forEach(function(row){
 							const row_element = row_template.clone(true).removeClass('d-none');
-							row_element.find('[name="name"]').empty().append($('<a>').attr('href', this.href(child_name + '/view/' + row['id'])).text(row['name']));;
 							this.target.children[child_name].as_child_of[this.target.target].action_column_names.child_of.forEach(function(column_name){
-								if (column_name === 'name') {
-									row_element.find('[name="name"]').empty().append($('<a>').attr('href', this.href(child_name + '/view/' + row['id'])).text(row['name']));
+								if (column_name === child_name + '_name') {
+									row_element.find('[name="' + column_name + '"]').empty().append($('<a>').attr('href', this.href(child_name + '/view/' + row[child_name + '_id'])).text(row[column_name]));
 								} else {
 									row_element.find('[name="' + column_name + '"]').text(row[column_name]);
 								}
@@ -68,7 +66,6 @@ class super_crud_controller extends controller {
 						this.show_exception_modal(JSON.parse(jqXHR.responseText));
 					},
 				});
-
 			}, this);
 		}
 	}
@@ -78,7 +75,7 @@ class super_crud_controller extends controller {
 			url: this.href(this.target.target + '/view/' + id, {type: 'api'}),
 			success: (data) => {
 				const result = JSON.parse(data);
-				$('#' + this.target.target + '_name').text(result.name);
+				$('#' + this.target.target + '_name').text(result[this.target.target + '_name']);
 				this.target.action_column_names[this.request.action].forEach(function(column_name){
 					$('[name="' + column_name + '"]').text(result[column_name]);
 				});
