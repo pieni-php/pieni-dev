@@ -23,8 +23,8 @@ return [
 	],
 	'action_column_names' => [
 		'index' => [
-			'name',
 			'category_name',
+			'name',
 		],
 		'view' => [
 			'category_name',
