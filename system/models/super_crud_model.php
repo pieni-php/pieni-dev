@@ -49,7 +49,7 @@ class super_crud_model extends model {
 			'SET '.$this->get_set_clause($this->target['columns'])."\n".
 			'WHERE '.$this->target['id_expr'].' = :id',
 			[
-				'id' => [
+'id' => [
 					'value' => $id,
 					'data_type' => PDO::PARAM_STR,
 				],
