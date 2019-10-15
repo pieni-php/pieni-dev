@@ -42,6 +42,22 @@ class super_crud_model extends model {
 		);
 	}
 
+	public function edit($id)
+	{
+		return $this->row(
+			'SELECT '.$this->get_select_clause()."\n".
+			'FROM `'.$this->target['target'].'`'."\n".
+			$this->get_join_tables().
+			'WHERE '.$this->target['columns'][$this->target['target'].'_id']['expr'].' = :id',
+			[
+				'id' => [
+					'value' => $id,
+					'data_type' => PDO::PARAM_STR,
+				],
+			]
+		);
+	}
+
 	public function exec_edit($id)
 	{
 		return $this->pbe(

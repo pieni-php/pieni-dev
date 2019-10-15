@@ -90,11 +90,10 @@ class super_crud_controller extends controller {
 
 	draw_edit(id) {
 		$.ajax({
-			url: this.href(this.target.target + '/view/' + id, {type: 'api'}),
+			url: this.href(this.target.target + '/edit/' + id, {type: 'api'}),
 			success: (data) => {
 				const result = JSON.parse(data);
-				this.target.action_column_names[this.request.action].forEach(function(column_name){
-console.log(column_name);
+				this.target.action_column_names['edit'].forEach(function(column_name){
 					$('[name="' + column_name + '"]').val(result[column_name]);
 				});
 			},
