@@ -4,6 +4,11 @@ return [
 	'target' => 'category',
 	'table' => 'category',
 	'child_names' => ['item'],
+
+	'table_table_actions' => ['add'],
+	'table_row_actions' => ['edit', 'delete'],
+	'row_row_actions' => ['edit', 'delete'],
+
 	'columns' => [
 		'category_id' => [
 			'expr' => '`category_id`',
