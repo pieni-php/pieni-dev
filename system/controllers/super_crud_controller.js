@@ -34,7 +34,6 @@ class super_crud_controller extends controller {
 				success: (result) => {
 					$(e.target).find('button').prop('disabled', true);
 					this.draw_view(id);
-					this.show_alert_modal('Please check your email.');
 				},
 				error: (jqXHR) => {
 					this.show_exception_modal(JSON.parse(jqXHR.responseText));

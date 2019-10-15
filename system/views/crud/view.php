@@ -27,4 +27,4 @@
 <?php endif; ?>
   <hr>
 </div>
-<?php $this->load_view('edit'); ?>
+<?php $this->load_view('edit', [], ['action' => 'edit']); ?>
