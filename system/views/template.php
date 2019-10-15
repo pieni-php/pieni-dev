@@ -11,7 +11,7 @@
   </head>
   <body>
 <?php $this->load_view('navbar', $data); ?>
-<?php $this->load_view($request['action'], $data); ?>
+<?php $this->load_view($request['action'], $data, $request); ?>
 <?php if ($this->loaded_controller_class_names !== []) $this->load_view('exception_modal', $data); ?>
 <?php if ($this->loaded_controller_class_names !== []) $this->load_view('alert_modal', $data); ?>
   </body>
