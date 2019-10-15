@@ -29,8 +29,10 @@ class super_crud_controller extends controller {
 		$('#show_edit_modal').click(() => {
 			this.draw_edit(id);
 			$('#' + this.target.target + '_edit button').prop('disabled', false);
+			$('#' + this.target.target + '_edit').modal('show');
 		});
 		$('#' + this.target.target + '_edit').submit((e) => {
+			$('#' + this.target.target + '_edit').modal('hide');
 			$.ajax({
 				url: this.href(this.target.target + '/exec_edit/' + id, {type: 'api'}),
 				type: 'post',
