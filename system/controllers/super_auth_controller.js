@@ -3,7 +3,7 @@ class super_auth_controller extends controller {
 	{
 		$('form').submit((e) => {
 			$.ajax({
-				url: this.href(this.target.target + '/join', {type: 'api'}),
+				url: this.href(this.request.target + '/join', {type: 'api'}),
 				type: 'post',
 				data: $(e.target).serialize(),
 				success: (result) => {
@@ -22,13 +22,13 @@ class super_auth_controller extends controller {
 	{
 		$('form').submit((e) => {
 			$.ajax({
-				url: this.href(this.target.target + '/register/' + this.request.params[0] + '/' + this.request.params[1], {type: 'api'}),
+				url: this.href(this.request.target + '/register/' + this.request.params[0] + '/' + this.request.params[1], {type: 'api'}),
 				type: 'post',
 				data: $(e.target).serialize(),
 				success: (result) => {
 					$(e.target).find('button').prop('disabled', true);
 					this.show_alert_modal('Registration has been completed.', () => {
-						location.href = this.href(this.target.target + '/login');
+						location.href = this.href(this.request.target + '/login');
 					});
 				},
 				error: (jqXHR) => {
@@ -43,7 +43,7 @@ class super_auth_controller extends controller {
 	{
 		$('form').submit((e) => {
 			$.ajax({
-				url: this.href(this.target.target + '/login', {type: 'api'}),
+				url: this.href(this.request.target + '/login', {type: 'api'}),
 				type: 'post',
 				data: $(e.target).serialize(),
 				success: (result) => {
@@ -62,11 +62,11 @@ class super_auth_controller extends controller {
 	{
 		$(() => {
 			$.ajax({
-				url: this.href(this.target.target + '/change_email_verify/' + this.request.params[0] + '/' + this.request.params[1], {type: 'api'}),
+				url: this.href(this.request.target + '/change_email_verify/' + this.request.params[0] + '/' + this.request.params[1], {type: 'api'}),
 				type: 'post',
 				success: (result) => {
 					this.show_alert_modal('The email has been changed.', () => {
-						location.href = this.href(this.target.target + '/login');
+						location.href = this.href(this.request.target + '/login');
 					});
 				},
 				error: (jqXHR) => {
@@ -80,7 +80,7 @@ class super_auth_controller extends controller {
 	{
 		$('form').submit((e) => {
 			$.ajax({
-				url: this.href(this.target.target + '/forgot_password', {type: 'api'}),
+				url: this.href(this.request.target + '/forgot_password', {type: 'api'}),
 				type: 'post',
 				data: $(e.target).serialize(),
 				success: (result) => {
@@ -99,13 +99,13 @@ class super_auth_controller extends controller {
 	{
 		$('form').submit((e) => {
 			$.ajax({
-				url: this.href(this.target.target + '/reset_password/' + this.request.params[0] + '/' + this.request.params[1], {type: 'api'}),
+				url: this.href(this.request.target + '/reset_password/' + this.request.params[0] + '/' + this.request.params[1], {type: 'api'}),
 				type: 'post',
 				data: $(e.target).serialize(),
 				success: (result) => {
 					$(e.target).find('button').prop('disabled', true);
 					this.show_alert_modal('The password has been reset.', () => {
-						location.href = this.href(this.target.target + '/login');
+						location.href = this.href(this.request.target + '/login');
 					});
 				},
 				error: (jqXHR) => {
@@ -120,7 +120,7 @@ class super_auth_controller extends controller {
 	{
 		$('form').submit((e) => {
 			$.ajax({
-				url: this.href(this.target.target + '/unregister', {type: 'api'}),
+				url: this.href(this.request.target + '/unregister', {type: 'api'}),
 				type: 'post',
 				data: $(e.target).serialize(),
 				success: (result) => {
@@ -141,7 +141,7 @@ class super_auth_controller extends controller {
 	{
 		$('form').submit((e) => {
 			$.ajax({
-				url: this.href(this.target.target + '/logout', {type: 'api'}),
+				url: this.href(this.request.target + '/logout', {type: 'api'}),
 				type: 'post',
 				data: $(e.target).serialize(),
 				success: (result) => {
@@ -160,7 +160,7 @@ class super_auth_controller extends controller {
 	{
 		$('form').submit((e) => {
 			$.ajax({
-				url: this.href(this.target.target + '/change_email', {type: 'api'}),
+				url: this.href(this.request.target + '/change_email', {type: 'api'}),
 				type: 'post',
 				data: $(e.target).serialize(),
 				success: (result) => {
@@ -179,13 +179,13 @@ class super_auth_controller extends controller {
 	{
 		$('form').submit((e) => {
 			$.ajax({
-				url: this.href(this.target.target + '/change_password', {type: 'api'}),
+				url: this.href(this.request.target + '/change_password', {type: 'api'}),
 				type: 'post',
 				data: $(e.target).serialize(),
 				success: (result) => {
 					$(e.target).find('button').prop('disabled', true);
 					this.show_alert_modal('The password has been changed.', () => {
-						location.href = this.href(this.target.target + '/login', {actor: 'g'});
+						location.href = this.href(this.request.target + '/login', {actor: 'g'});
 					});
 				},
 				error: (jqXHR) => {

@@ -69,8 +69,8 @@ class super_auth_model extends model {
 		}
 		$this->get_dbh()->beginTransaction();
 		$this->pbe(
-			'INSERT INTO `'.$this->target['table'].'` SET '.$this->get_set_clause($this->target['columns']),
-			$this->get_bind_assocs($this->target['columns'], $_POST)
+			'INSERT INTO `'.$this->target['table'].'` SET '.$this->get_set_clause(),
+			$this->get_bind_assocs($_POST)
 		);
 		$this->pbe('INSERT INTO `auth_'.$this->target['actor'].'_register_succeeded` SET `auth_'.$this->target['actor'].'_register_attempted_id` = :auth_'.$this->target['actor'].'_register_attempted_id, `'.$this->target['table'].'_id` = :id, `auth_'.$this->target['actor'].'_register_succeeded_microtime` = :microtime', [
 			'auth_'.$this->target['actor'].'_register_attempted_id' => [

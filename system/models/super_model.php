@@ -150,15 +150,9 @@ class super_model {
 		return implode(' AND ', $array);
 	}
 
-	protected function get_bind_assocs($id, $data)
+	protected function get_bind_assocs($data)
 	{
 		$bind_assocs = [];
-		$column_name = $this->target['target'].'_id';
-		$column = $this->target['columns'][$column_name];
-		$bind_assocs['id'] = [
-			'value' => $id,
-			'data_type' => $column['data_type'],
-		];
 		foreach ($this->target['action_column_names'][$this->request['action']] as $column_name) {
 			$column = $this->target['columns'][$column_name];
 			$bind_assocs[$column_name] = [

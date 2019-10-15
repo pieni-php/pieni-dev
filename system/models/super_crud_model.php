@@ -48,7 +48,12 @@ class super_crud_model extends model {
 			'UPDATE `'.$this->target['target'].'`'."\n".
 			'SET '.$this->get_set_clause()."\n".
 			'WHERE '.$this->target['columns'][$this->target['target'].'_id']['expr'].' = :id',
-			$this->get_bind_assocs($id, $_POST)
+			array_merge([
+				'id' => [
+					'value' => $id,
+					'data_type' => $this->target['columns'][$this->target['target'].'_id']['data_type'],
+				],
+			], $this->get_bind_assocs($_POST))
 		);
 	}
 }
