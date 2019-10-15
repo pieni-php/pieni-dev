@@ -141,21 +141,28 @@ class super_model {
 		return implode("\n", $join_tables);
 	}
 
-	protected function get_set_clause($columns)
+	protected function get_set_clause()
 	{
 		$array = [];
-		foreach ($columns as $key => $column) {
-			$array[] = '`'.$key.'` = :'.$key;
+		foreach ($this->target['action_column_names'][$this->request['action']] as $column_name) {
+			$array[] = '`'.$column_name.'` = :'.$column_name;
 		}
 		return implode(' AND ', $array);
 	}
 
-	protected function get_bind_assocs($columns, $data)
+	protected function get_bind_assocs($id, $data)
 	{
 		$bind_assocs = [];
-		foreach ($columns as $key => $column) {
-			$bind_assocs[$key] = [
-				'value' => $data[$key],
+		$column_name = $this->target['target'].'_id';
+		$column = $this->target['columns'][$column_name];
+		$bind_assocs['id'] = [
+			'value' => $id,
+			'data_type' => $column['data_type'],
+		];
+		foreach ($this->target['action_column_names'][$this->request['action']] as $column_name) {
+			$column = $this->target['columns'][$column_name];
+			$bind_assocs[$column_name] = [
+				'value' => $data[$column_name],
 				'data_type' => $column['data_type'],
 			];
 		}

@@ -46,14 +46,9 @@ class super_crud_model extends model {
 	{
 		return $this->pbe(
 			'UPDATE `'.$this->target['target'].'`'."\n".
-			'SET '.$this->get_set_clause($this->target['columns'])."\n".
-			'WHERE '.$this->target['columns']['id']['expr'].' = :id',
-			[
-'id' => [
-					'value' => $id,
-					'data_type' => PDO::PARAM_STR,
-				],
-			]
+			'SET '.$this->get_set_clause()."\n".
+			'WHERE '.$this->target['columns'][$this->target['target'].'_id']['expr'].' = :id',
+			$this->get_bind_assocs($id, $_POST)
 		);
 	}
 }

@@ -26,5 +26,8 @@ return [
 		'view' => [
 			'id_and_name',
 		],
+		'edit' => [
+			'category_name',
+		],
 	],
 ];

@@ -7,7 +7,7 @@
       <div class="modal-body">
         <div class="form-group">
           <label class="col-form-label">Email:</label>
-          <input class="form-control" name="email">
+          <input class="form-control" name="category_name">
         </div>
       </div>
       <div class="modal-footer">
