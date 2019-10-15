@@ -26,9 +26,12 @@ class super_crud_controller extends controller {
 
 	view(id)
 	{
+		$('#show_edit_modal').click(() => {
+			this.draw_edit(id);
+		});
 		$('#' + this.target.target + '_edit').submit((e) => {
 			$.ajax({
-				url: this.href(this.target.target + '/edit/' + id, {type: 'api'}),
+				url: this.href(this.target.target + '/exec_edit/' + id, {type: 'api'}),
 				type: 'post',
 				data: $(e.target).serialize(),
 				success: (result) => {
@@ -77,6 +80,22 @@ class super_crud_controller extends controller {
 				$('#' + this.target.target + '_name').text(result[this.target.target + '_name']);
 				this.target.action_column_names[this.request.action].forEach(function(column_name){
 					$('[name="' + column_name + '"]').text(result[column_name]);
+				});
+			},
+			error: (jqXHR) => {
+				this.show_exception_modal(JSON.parse(jqXHR.responseText));
+			},
+		});
+	}
+
+	draw_edit(id) {
+		$.ajax({
+			url: this.href(this.target.target + '/view/' + id, {type: 'api'}),
+			success: (data) => {
+				const result = JSON.parse(data);
+				this.target.action_column_names[this.request.action].forEach(function(column_name){
+console.log(column_name);
+					$('[name="' + column_name + '"]').val(result[column_name]);
 				});
 			},
 			error: (jqXHR) => {

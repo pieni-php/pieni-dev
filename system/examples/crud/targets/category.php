@@ -26,7 +26,7 @@ return [
 		'view' => [
 			'id_and_name',
 		],
-		'edit' => [
+		'exec_edit' => [
 			'category_name',
 		],
 	],

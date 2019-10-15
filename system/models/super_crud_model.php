@@ -42,7 +42,7 @@ class super_crud_model extends model {
 		);
 	}
 
-	public function edit($id)
+	public function exec_edit($id)
 	{
 		return $this->pbe(
 			'UPDATE `'.$this->target['target'].'`'."\n".

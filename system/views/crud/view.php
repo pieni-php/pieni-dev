@@ -8,6 +8,7 @@
     </tr>
 <?php endforeach; ?>
   </table>
+<button id="show_edit_modal" class="btn btn-primary">edit</button>
   <hr>
 <?php if (isset($target['child_names'])): ?>
   <ul class="nav nav-tabs">
