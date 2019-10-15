@@ -16,7 +16,9 @@ class super_view {
 	public function initialize_exception_handler()
 	{
 		exception_handler::initialize($this->config, function($data){
-			ob_end_clean();
+			while (ob_get_status()['level'] > 0) {
+				ob_end_clean();
+			}
 			$this->load_view('template', $data, ['target' => 'exception', 'action' => 'index', 'params' => []]);
 		});
 		return $this;
