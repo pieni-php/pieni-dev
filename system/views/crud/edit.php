@@ -1,4 +1,4 @@
-<form class="modal fade" id="<?php $this->h($target['target']); ?>_edit">
+<form class="modal fade" id="<?php $this->h($target['target']); ?>_edit" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
