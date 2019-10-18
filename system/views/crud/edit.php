@@ -2,7 +2,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Join</h5>
+        <h5 class="modal-title">edit</h5>
       </div>
       <div class="modal-body">
 <?php foreach ($target['action_column_names'][$request['action']] as $column_name): ?>
@@ -13,7 +13,7 @@
 <?php endforeach; ?>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary">Receive email to register</button>
+        <button class="btn btn-primary">save</button>
       </div>
     </div>
   </div>
