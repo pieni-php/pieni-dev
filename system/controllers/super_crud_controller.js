@@ -6,6 +6,22 @@ class super_crud_controller extends controller {
 			$('#' + this.target.target + '_edit button').prop('disabled', false);
 			$('#' + this.target.target + '_edit').modal('show');
 		});
+		$('#' + this.target.target + '_edit').submit((e) => {
+			$('#' + this.target.target + '_edit').modal('hide');
+			$.ajax({
+				url: this.href(this.target.target + '/exec_edit/' + $(e.target).data('id'), {type: 'api'}),
+				type: 'post',
+				data: $(e.target).serialize(),
+				success: (result) => {
+					$(e.target).find('button').prop('disabled', true);
+					this.draw_view($(e.target).data('id'));
+				},
+				error: (jqXHR) => {
+					this.show_exception_modal(JSON.parse(jqXHR.responseText));
+				},
+			});
+			return false;
+		});
 		$.ajax({
 			url: this.href(this.target.target, {type: 'api'}),
 			success: (data) => {
@@ -40,12 +56,12 @@ class super_crud_controller extends controller {
 		$('#' + this.target.target + '_edit').submit((e) => {
 			$('#' + this.target.target + '_edit').modal('hide');
 			$.ajax({
-				url: this.href(this.target.target + '/exec_edit/' + id, {type: 'api'}),
+				url: this.href(this.target.target + '/exec_edit/' + $(e.target).data('id'), {type: 'api'}),
 				type: 'post',
 				data: $(e.target).serialize(),
 				success: (result) => {
 					$(e.target).find('button').prop('disabled', true);
-					this.draw_view(id);
+					this.draw_view($(e.target).data('id'));
 				},
 				error: (jqXHR) => {
 					this.show_exception_modal(JSON.parse(jqXHR.responseText));
@@ -98,6 +114,7 @@ class super_crud_controller extends controller {
 	}
 
 	draw_edit(id) {
+		$('#' + this.target.target + '_edit').data('id', id);
 		$.ajax({
 			url: this.href(this.target.target + '/edit/' + id, {type: 'api'}),
 			success: (data) => {
