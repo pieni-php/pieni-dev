@@ -72,4 +72,35 @@ class super_crud_model extends model {
 			], $this->get_bind_assocs($_POST))
 		);
 	}
+
+	public function delete($id)
+	{
+		return $this->row(
+			'SELECT '.$this->get_select_clause()."\n".
+			'FROM `'.$this->target['target'].'`'."\n".
+			$this->get_join_tables().
+			'WHERE '.$this->target['columns'][$this->target['target'].'_id']['expr'].' = :id',
+			[
+				'id' => [
+					'value' => $id,
+					'data_type' => PDO::PARAM_STR,
+				],
+			]
+		);
+	}
+
+	public function exec_delete($id)
+	{
+		return $this->pbe(
+			'UPDATE `'.$this->target['target'].'`'."\n".
+			'SET '.$this->get_set_clause()."\n".
+			'WHERE '.$this->target['columns'][$this->target['target'].'_id']['expr'].' = :id',
+			array_merge([
+				'id' => [
+					'value' => $id,
+					'data_type' => $this->target['columns'][$this->target['target'].'_id']['data_type'],
+				],
+			], $this->get_bind_assocs($_POST))
+		);
+	}
 }
