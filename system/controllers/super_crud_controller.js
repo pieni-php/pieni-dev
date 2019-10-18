@@ -82,7 +82,7 @@ class super_crud_controller extends controller {
 				data: $(e.target).serialize(),
 				success: (result) => {
 					$(e.target).find('button').prop('disabled', true);
-					this.draw_view($(e.target).data('id'));
+					location.href = document.referrer;
 				},
 				error: (jqXHR) => {
 					this.show_exception_modal(JSON.parse(jqXHR.responseText));
