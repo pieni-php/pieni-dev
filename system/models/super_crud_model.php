@@ -92,15 +92,14 @@ class super_crud_model extends model {
 	public function exec_delete($id)
 	{
 		return $this->pbe(
-			'UPDATE `'.$this->target['target'].'`'."\n".
-			'SET '.$this->get_set_clause()."\n".
+			'DELETE FROM `'.$this->target['target'].'`'."\n".
 			'WHERE '.$this->target['columns'][$this->target['target'].'_id']['expr'].' = :id',
-			array_merge([
+			[
 				'id' => [
 					'value' => $id,
 					'data_type' => $this->target['columns'][$this->target['target'].'_id']['data_type'],
 				],
-			], $this->get_bind_assocs($_POST))
+			]
 		);
 	}
 }
