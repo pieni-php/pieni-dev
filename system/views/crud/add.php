@@ -5,7 +5,7 @@
         <h5 class="modal-title">add</h5>
       </div>
       <div class="modal-body">
-<?php foreach ($target['action_column_names'][$request['action']] as $column_name): ?>
+<?php foreach ($target['action_column_names']['exec_'.$request['action']] as $column_name): ?>
         <div class="form-group">
           <label class="col-form-label"><?php $this->h($column_name); ?>:</label>
           <input class="form-control" name="<?php $this->h($column_name); ?>">

@@ -42,6 +42,15 @@ class super_crud_model extends model {
 		);
 	}
 
+	public function exec_add()
+	{
+		return $this->pbe(
+			'INSERT INTO `'.$this->target['target'].'`'."\n".
+			'SET '.$this->get_set_clause()."\n",
+			$this->get_bind_assocs($_POST)
+		);
+	}
+
 	public function edit($id)
 	{
 		return $this->row(

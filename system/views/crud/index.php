@@ -1,5 +1,6 @@
 <div class="container">
   <h1><?php $this->h($target['target']); ?></h1>
+  <button class="show_add_modal btn btn-primary">add</button>
   <table class="table" style="width:0; white-space:nowrap;">
     <tr>
 <?php foreach ($target['action_column_names'][$request['action']] as $column_name): ?>
@@ -18,5 +19,6 @@
     </tr>
   </table>
 </div>
+<?php $this->load_view('add', [], ['action' => 'add']); ?>
 <?php $this->load_view('edit', [], ['action' => 'edit']); ?>
 <?php $this->load_view('delete', [], ['action' => 'delete']); ?>

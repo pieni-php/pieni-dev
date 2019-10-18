@@ -26,6 +26,7 @@ return [
 					'category' => [
 						'index' => [],
 						'view' => ['/^[1-9]\d*$/'],
+						'exec_add' => [],
 						'edit' => ['/^[1-9]\d*$/'],
 						'exec_edit' => ['/^[1-9]\d*$/'],
 						'delete' => ['/^[1-9]\d*$/'],

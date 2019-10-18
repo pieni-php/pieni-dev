@@ -31,6 +31,9 @@ return [
 		'view' => [
 			'id_and_name',
 		],
+		'exec_add' => [
+			'category_name',
+		],
 		'edit' => [
 			'category_name',
 		],

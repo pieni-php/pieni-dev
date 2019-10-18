@@ -1,6 +1,11 @@
 class super_crud_controller extends controller {
 	index()
 	{
+		$('.show_add_modal').click((e) => {
+			this.draw_add();
+			$('#' + this.target.target + '_add button').prop('disabled', false);
+			$('#' + this.target.target + '_add').modal('show');
+		});
 		$('.show_edit_modal').click((e) => {
 			this.draw_edit($(e.target).closest('.row_element').data('id'));
 			$('#' + this.target.target + '_edit button').prop('disabled', false);
@@ -10,6 +15,22 @@ class super_crud_controller extends controller {
 			this.draw_delete($(e.target).closest('.row_element').data('id'));
 			$('#' + this.target.target + '_delete button').prop('disabled', false);
 			$('#' + this.target.target + '_delete').modal('show');
+		});
+		$('#' + this.target.target + '_add').submit((e) => {
+			$('#' + this.target.target + '_add').modal('hide');
+			$.ajax({
+				url: this.href(this.target.target + '/exec_add', {type: 'api'}),
+				type: 'post',
+				data: $(e.target).serialize(),
+				success: (result) => {
+					$(e.target).find('button').prop('disabled', true);
+					this.draw_index();
+				},
+				error: (jqXHR) => {
+					this.show_exception_modal(JSON.parse(jqXHR.responseText));
+				},
+			});
+			return false;
 		});
 		$('#' + this.target.target + '_edit').submit((e) => {
 			$('#' + this.target.target + '_edit').modal('hide');
@@ -158,6 +179,12 @@ class super_crud_controller extends controller {
 			error: (jqXHR) => {
 				this.show_exception_modal(JSON.parse(jqXHR.responseText));
 			},
+		});
+	}
+
+	draw_add(id) {
+		this.target.action_column_names['exec_add'].forEach(function(column_name){
+			$('[name="' + column_name + '"]').val('');
 		});
 	}
 
