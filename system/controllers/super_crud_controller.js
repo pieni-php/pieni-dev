@@ -1,6 +1,11 @@
 class super_crud_controller extends controller {
 	index()
 	{
+		$('.show_edit_modal').click((e) => {
+			this.draw_edit($(e.target).data('id'));
+			$('#' + this.target.target + '_edit button').prop('disabled', false);
+			$('#' + this.target.target + '_edit').modal('show');
+		});
 		$.ajax({
 			url: this.href(this.target.target, {type: 'api'}),
 			success: (data) => {
@@ -15,6 +20,7 @@ class super_crud_controller extends controller {
 							row_element.find('[name="' + column_name + '"]').text(row[column_name]);
 						}
 					}, this);
+					row_element.find('.show_edit_modal').data('id', row[this.target.target + '_id']);
 					$('table').append(row_element);
 				}, this);
 			},

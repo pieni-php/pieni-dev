@@ -5,11 +5,16 @@
 <?php foreach ($target['action_column_names'][$request['action']] as $column_name): ?>
       <th><?php $this->h($column_name); ?></th>
 <?php endforeach; ?>
+      <th>actions</th>
     </tr>
     <tr id="row_template" class="d-none">
 <?php foreach ($target['action_column_names'][$request['action']] as $column_name): ?>
       <td name="<?php $this->h($column_name); ?>"></td>
 <?php endforeach; ?>
+      <td>
+        <button class="show_edit_modal btn btn-primary" data-id="">edit</button>
+      </td>
     </tr>
   </table>
 </div>
+<?php $this->load_view('edit', [], ['action' => 'edit']); ?>
