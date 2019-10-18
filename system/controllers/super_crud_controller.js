@@ -6,6 +6,11 @@ class super_crud_controller extends controller {
 			$('#' + this.target.target + '_edit button').prop('disabled', false);
 			$('#' + this.target.target + '_edit').modal('show');
 		});
+		$('.show_delete_modal').click((e) => {
+			this.draw_delete($(e.target).data('id'));
+			$('#' + this.target.target + '_delete button').prop('disabled', false);
+			$('#' + this.target.target + '_delete').modal('show');
+		});
 		$('#' + this.target.target + '_edit').submit((e) => {
 			$('#' + this.target.target + '_edit').modal('hide');
 			$.ajax({
@@ -127,6 +132,22 @@ class super_crud_controller extends controller {
 			success: (data) => {
 				const result = JSON.parse(data);
 				this.target.action_column_names['edit'].forEach(function(column_name){
+					$('[name="' + column_name + '"]').val(result[column_name]);
+				});
+			},
+			error: (jqXHR) => {
+				this.show_exception_modal(JSON.parse(jqXHR.responseText));
+			},
+		});
+	}
+
+	draw_delete(id) {
+		$('#' + this.target.target + '_delete').data('id', id);
+		$.ajax({
+			url: this.href(this.target.target + '/delete/' + id, {type: 'api'}),
+			success: (data) => {
+				const result = JSON.parse(data);
+				this.target.action_column_names['delete'].forEach(function(column_name){
 					$('[name="' + column_name + '"]').val(result[column_name]);
 				});
 			},

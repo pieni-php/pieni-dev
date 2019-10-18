@@ -37,5 +37,13 @@ return [
 		'exec_edit' => [
 			'category_name',
 		],
+		'delete' => [
+			'category_id',
+			'category_name',
+		],
+		'exec_delete' => [
+			'category_id',
+			'category_name',
+		],
 	],
 ];

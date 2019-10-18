@@ -13,8 +13,10 @@
 <?php endforeach; ?>
       <td>
         <button class="show_edit_modal btn btn-primary" data-id="">edit</button>
+        <button class="show_delete_modal btn btn-primary" data-id="">delete</button>
       </td>
     </tr>
   </table>
 </div>
 <?php $this->load_view('edit', [], ['action' => 'edit']); ?>
+<?php $this->load_view('delete', [], ['action' => 'delete']); ?>
