@@ -9,6 +9,7 @@
 <?php endforeach; ?>
   </table>
 <button id="show_edit_modal" class="btn btn-primary">edit</button>
+<button id="show_delete_modal" class="btn btn-primary">delete</button>
   <hr>
 <?php if (isset($target['child_names'])): ?>
   <ul class="nav nav-tabs">
@@ -29,3 +30,4 @@
   <hr>
 </div>
 <?php $this->load_view('edit', [], ['action' => 'edit']); ?>
+<?php $this->load_view('delete', [], ['action' => 'delete']); ?>
