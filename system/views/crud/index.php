@@ -7,7 +7,7 @@
 <?php endforeach; ?>
       <th>actions</th>
     </tr>
-    <tr id="row_template" class="d-none">
+    <tr class="row_template d-none">
 <?php foreach ($target['action_column_names'][$request['action']] as $column_name): ?>
       <td name="<?php $this->h($column_name); ?>"></td>
 <?php endforeach; ?>

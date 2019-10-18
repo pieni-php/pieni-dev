@@ -14,7 +14,7 @@ class super_crud_controller extends controller {
 				data: $(e.target).serialize(),
 				success: (result) => {
 					$(e.target).find('button').prop('disabled', true);
-					this.draw_view($(e.target).data('id'));
+					this.draw_index();
 				},
 				error: (jqXHR) => {
 					this.show_exception_modal(JSON.parse(jqXHR.responseText));
@@ -22,28 +22,7 @@ class super_crud_controller extends controller {
 			});
 			return false;
 		});
-		$.ajax({
-			url: this.href(this.target.target, {type: 'api'}),
-			success: (data) => {
-				const result = JSON.parse(data);
-				const row_template = $('#row_template');
-				result.forEach(function(row){
-					const row_element = row_template.clone(true).removeClass('d-none');
-					this.target.action_column_names[this.request.action].forEach(function(column_name){
-						if (column_name === this.target.target + '_name') {
-							row_element.find('[name="' + column_name + '"]').empty().append($('<a>').attr('href', this.href(this.target.target + '/view/' + row[this.target.target + '_id'])).text(row[column_name]));
-						} else {
-							row_element.find('[name="' + column_name + '"]').text(row[column_name]);
-						}
-					}, this);
-					row_element.find('.show_edit_modal').data('id', row[this.target.target + '_id']);
-					$('table').append(row_element);
-				}, this);
-			},
-			error: (jqXHR) => {
-				this.show_exception_modal(JSON.parse(jqXHR.responseText));
-			},
-		});
+		this.draw_index();
 	}
 
 	view(id)
@@ -76,7 +55,7 @@ class super_crud_controller extends controller {
 					url: this.href(child_name + '/child_of/' + this.target.target + '/' + id, {type: 'api'}),
 					success: (data) => {
 						const result = JSON.parse(data);
-						const row_template = $('#' + child_name + ' .row_template');
+						const row_template = $('#' + child_name + ' .row_template').eq(0);
 						result.forEach(function(row){
 							const row_element = row_template.clone(true).removeClass('d-none');
 							this.target.children[child_name].as_child_of[this.target.target].action_column_names.child_of.forEach(function(column_name){
@@ -95,6 +74,34 @@ class super_crud_controller extends controller {
 				});
 			}, this);
 		}
+	}
+
+	draw_index()
+	{
+		$.ajax({
+			url: this.href(this.target.target, {type: 'api'}),
+			success: (data) => {
+				const result = JSON.parse(data);
+				const row_template = $('.row_template').eq(0);
+				$('.row_element').remove();
+				result.forEach(function(row){
+					const row_element = row_template.clone(true).removeClass('row_template d-none').addClass('row_element');
+					row_element.data('id', row[this.target.target + '_id']);
+					this.target.action_column_names[this.request.action].forEach(function(column_name){
+						if (column_name === this.target.target + '_name') {
+							row_element.find('[name="' + column_name + '"]').empty().append($('<a>').attr('href', this.href(this.target.target + '/view/' + row[this.target.target + '_id'])).text(row[column_name]));
+						} else {
+							row_element.find('[name="' + column_name + '"]').text(row[column_name]);
+						}
+					}, this);
+					row_element.find('.show_edit_modal').data('id', row[this.target.target + '_id']);
+					$('table').append(row_element);
+				}, this);
+			},
+			error: (jqXHR) => {
+				this.show_exception_modal(JSON.parse(jqXHR.responseText));
+			},
+		});
 	}
 
 	draw_view(id) {
