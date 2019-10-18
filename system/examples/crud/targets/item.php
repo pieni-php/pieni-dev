@@ -27,6 +27,12 @@ return [
 		'view' => [
 			'category_name',
 		],
+		'edit' => [
+			'item_name',
+		],
+		'exec_edit' => [
+			'item_name',
+		],
 	],
 	'as_child_of' => [
 		'category' => [

@@ -8,7 +8,7 @@
 <?php foreach ($target['action_column_names'][$request['action']] as $column_name): ?>
         <div class="form-group">
           <label class="col-form-label"><?php $this->h($column_name); ?>:</label>
-          <input class="form-control" name="category_name">
+          <input class="form-control" name="<?php $this->h($column_name); ?>">
         </div>
 <?php endforeach; ?>
       </div>
