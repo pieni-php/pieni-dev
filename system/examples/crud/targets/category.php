@@ -41,9 +41,5 @@ return [
 			'category_id',
 			'category_name',
 		],
-		'exec_delete' => [
-			'category_id',
-			'category_name',
-		],
 	],
 ];

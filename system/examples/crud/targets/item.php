@@ -33,6 +33,10 @@ return [
 		'exec_edit' => [
 			'item_name',
 		],
+		'delete' => [
+			'item_id',
+			'item_name',
+		],
 	],
 	'as_child_of' => [
 		'category' => [
