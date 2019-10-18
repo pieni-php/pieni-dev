@@ -99,7 +99,6 @@ class super_crud_controller extends controller {
 							row_element.find('[name="' + column_name + '"]').text(row[column_name]);
 						}
 					}, this);
-//					row_element.find('.show_edit_modal').data('id', row[this.target.target + '_id']);
 					$('table').append(row_element);
 				}, this);
 			},
