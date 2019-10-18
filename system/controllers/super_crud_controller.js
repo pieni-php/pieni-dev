@@ -2,12 +2,12 @@ class super_crud_controller extends controller {
 	index()
 	{
 		$('.show_edit_modal').click((e) => {
-			this.draw_edit($(e.target).data('id'));
+			this.draw_edit($(e.target).closest('.row_element').data('id'));
 			$('#' + this.target.target + '_edit button').prop('disabled', false);
 			$('#' + this.target.target + '_edit').modal('show');
 		});
 		$('.show_delete_modal').click((e) => {
-			this.draw_delete($(e.target).data('id'));
+			this.draw_delete($(e.target).closest('.row_element').data('id'));
 			$('#' + this.target.target + '_delete button').prop('disabled', false);
 			$('#' + this.target.target + '_delete').modal('show');
 		});
@@ -99,7 +99,7 @@ class super_crud_controller extends controller {
 							row_element.find('[name="' + column_name + '"]').text(row[column_name]);
 						}
 					}, this);
-					row_element.find('.show_edit_modal').data('id', row[this.target.target + '_id']);
+//					row_element.find('.show_edit_modal').data('id', row[this.target.target + '_id']);
 					$('table').append(row_element);
 				}, this);
 			},

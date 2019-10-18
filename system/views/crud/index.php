@@ -12,8 +12,8 @@
       <td name="<?php $this->h($column_name); ?>"></td>
 <?php endforeach; ?>
       <td>
-        <button class="show_edit_modal btn btn-primary" data-id="">edit</button>
-        <button class="show_delete_modal btn btn-primary" data-id="">delete</button>
+        <button class="show_edit_modal btn btn-primary">edit</button>
+        <button class="show_delete_modal btn btn-primary">delete</button>
       </td>
     </tr>
   </table>
