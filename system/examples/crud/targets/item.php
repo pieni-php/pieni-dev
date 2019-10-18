@@ -27,6 +27,9 @@ return [
 		'view' => [
 			'category_name',
 		],
+		'exec_add' => [
+			'item_name',
+		],
 		'edit' => [
 			'item_name',
 		],
