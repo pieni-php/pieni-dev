@@ -5,6 +5,7 @@ return [
 	'columns' => [
 		'category_id' => [
 			'expr' => '`category_id`',
+			'data_type' => PDO::PARAM_INT,
 		],
 	],
 ];

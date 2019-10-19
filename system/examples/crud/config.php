@@ -31,6 +31,9 @@ return [
 						'index' => [],
 						'view' => ['/^[1-9]\d*$/'],
 					],
+					'category_item' => [
+						'child_of' => ['/^[1-9]\d*$/'],
+					],
 				],
 			],
 		],
