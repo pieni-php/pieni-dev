@@ -41,13 +41,13 @@ class super_view {
 			['views'],
 			[$request['language'], ''],
 			[$request['actor'], ''],
-			isset($this->target['fallback']) ? [$request['target'], $this->target['fallback'], ''] : [$request['target'], ''],
+			isset($target['fallback']) ? [$request['target'], $target['fallback'], ''] : [$request['target'], ''],
 			[$view_name.'.php'],
 		]);
 		if ($view_path !== null) {
 			return require './'.$view_path;
 		} else {
-			exception_handler::throw_exception('view_not_found', ['config' => $this->config, 'request' => $this->request, 'target' => $this->target, 'view_name' => $view_name, 'replace_segments' => $replace_segments]);
+			exception_handler::throw_exception('view_not_found', ['config' => $this->config, 'request' => $request, 'target' => $target, 'view_name' => $view_name, 'replace_segments' => $replace_segments]);
 		}
 	}
 
