@@ -1,5 +1,20 @@
 <?php
 class super_crud_model extends model {
+	protected function get_parent_id_conditions()
+	{
+		return $this->target['columns'][$this->target['parent_id_column_names'][0]]['expr'].' = :'.$this->target['parent_id_column_names'][0];
+	}
+
+	protected function get_parent_id_params($parent_ids)
+	{
+		return [
+			$this->target['parent_id_column_names'][0] => [
+				'value' => $parent_ids[0],
+				'data_type' => $this->target['columns'][$this->target['parent_id_column_names'][0]]['data_type'],
+			],
+		];
+	}
+
 	public function index()
 	{
 		return $this->rows(
@@ -10,13 +25,10 @@ class super_crud_model extends model {
 	public function child_of(...$parent_ids)
 	{
 		return $this->rows(
-			'SELECT * FROM `'.$this->target['table'].'` WHERE '.$this->target['columns']['parent_ids'][0]['expr'].' = :parent_id',
-			[
-				'parent_id' => [
-					'value' => $parent_ids[0],
-					'data_type' => $this->target['columns']['parent_ids'][0]['data_type'],
-				],
-			]
+			'SELECT * FROM `'.$this->target['table'].'` WHERE '.$this->get_parent_id_conditions(),
+			$this->get_parent_id_params($parent_ids)
+
+
 		);
 	}
 
