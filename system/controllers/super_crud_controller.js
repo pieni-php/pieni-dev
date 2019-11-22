@@ -12,10 +12,10 @@ class super_crud_controller extends controller {
 		});
 	}
 
-	view(id)
+	view(...ids)
 	{
 		$.ajax({
-			url: this.href(this.request.target + '/view/' + id, {type: 'api'}),
+			url: this.href(this.request.target + '/view/' + ids.join('/'), {type: 'api'}),
 			success: (result) => {
 				console.log(result);
 			},
